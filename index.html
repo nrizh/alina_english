@@ -9087,7 +9087,7 @@ function viewSpeaking(box) {
     <article class="sheet stack" id="sp4"><div class="row" style="justify-content:space-between"><h3>Task 4 · Photos for a project</h3><span class="chip">10 points</span></div>
       <p class="small en">Imagine that you and your friend are doing a school project “${esc(V1.t4.project)}”. You have found some photos to illustrate it but for technical reasons you cannot send them now. Leave a voice message to your friend explaining your choice of the photos and sharing some ideas about the project. In 2.5 minutes be ready to:</p>
       <ul class="plan en small">${V1.t4.plan.map(p => `<li>${esc(p)}</li>`).join("")}</ul><p class="small en">You will speak for not more than 3 minutes (12–15 sentences). You have to talk continuously.</p>
-      <div class="photos">${V1.t4.photos.map((p, i) => `<figure><img src="${p}" alt="Photo ${i + 1}" class="exam-img"><figcaption class="small muted">Photo ${i + 1}</figcaption></figure>`).join("")}</div>
+      ${V1.t4.note ? `<div class="hint-box small">⚠️ ${esc(V1.t4.note)}</div>` : ""}<div class="photos">${V1.t4.photos.map((p, i) => `<figure><img src="${p}" alt="Photo ${i + 1}" class="exam-img"><figcaption class="small muted">Photo ${i + 1}</figcaption></figure>`).join("")}</div>
       <div class="row"><button class="btn primary" data-go="4">Start Task 4</button><span data-cd></span></div>
       <textarea data-t4 rows="9" lang="en" placeholder="Speak — tap 🎤 on the keyboard (12–15 sentences)">${esc(S.speak[SK + "t4"]?.text || "")}</textarea>
       <div class="row"><span class="small muted" data-sc></span><button class="btn" data-ai4>Ask Claude for feedback</button></div><div data-out4></div>
@@ -9358,7 +9358,7 @@ function partReading(st) {
   bindSegs(body);
   $$("[data-seg^='t11']", body).forEach(sg => sg.addEventListener("pick", e => { const l = sg.dataset.seg.slice(3); const gm = $(`.gapmark[data-gap="${l}"]`, body); gm.textContent = `${l} · ${V.t11.options[+e.detail - 1]}`; }));
   [t, b] = taskBox("12–18", "Прочитайте текст и выполните задания 12–18. Выберите 1, 2, 3 или 4.");
-  const rd = document.createElement("div"); rd.className = "reading"; rd.innerHTML = `<h3 style="font-size:1.05rem">${V.t1218.title}</h3>` + V.t1218.text.map(s => `<p>${esc(s)}</p>`).join("");
+  const rd = document.createElement("div"); rd.className = "reading"; rd.innerHTML = (V.t1218.note ? `<p class="small muted">⚠️ ${esc(V.t1218.note)}</p>` : "") + `<h3 style="font-size:1.05rem">${V.t1218.title}</h3>` + V.t1218.text.map(s => `<p>${esc(s)}</p>`).join("");
   b.append(rd); const qq = document.createElement("div"); qq.innerHTML = V.t1218.questions.map(x => mcqHTML(x, st)).join(""); b.append(qq); body.append(t);
   bindSegs(qq); return p;
 }
@@ -12425,6 +12425,970 @@ egeWriting("v15", {
   t382: { label: "Extracurricular activities", prompt: "Imagine that you are doing a project on the most popular extracurricular activities among Zetland teenagers. You have found some data on the subject — the results of a survey conducted among Zetland teenagers (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
     question: "What extracurricular activity do you enjoy most of all?", table: [["Sports", 45], ["Music and singing", 21], ["Handicrafts", 17], ["Dancing", 12], ["Chess", 5]],
     problem: "outline a problem that can arise with choosing extracurricular activities and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the role of extracurricular activities in the lives of teenagers.", pages: "с. 173" }
+});
+
+/* ===================== ЕГЭ 2027 · ВАРИАНТ 16 =====================
+   Source: ЕГЭ 2027 (ФИПИ), written part pp. 174–184, oral part pp. 259–260, listening scripts pp. 323–326, oral Task 3 script p. 349,
+   key p. 357. OCR of the scan, checked against the page images (words under the watermark restored from the page context).
+   Listening: the original recording from Natali’s files.
+   Oral Task 1 text is the same as in variant 11 (printed so in the book). */
+EGE_VARIANTS.v16 = {
+  id: "v16", title: "Вариант 16",
+  t1: {
+    statements: ["A gap year makes you a better college applicant.", "I took a gap year to have some rest.", "International experience during a gap year improved my skills.", "It’s a good chance to prepare for further education.", "There is a wide choice of gap year opportunities nowadays.", "It’s better to get your place at college before taking a gap year.", "My gap year really helped me to define my interests."],
+    key: "421367",
+    script: [
+      ["Speaker A", "A gap year does not have to be an entirely study-free zone. I, for example, have decided to pursue an international Master’s degree, so I need to invest some time in preparation. For programmes taught in English, applicants are usually required to submit an English proficiency test. Still, even if you do not have to sit any of these exams, compiling your Master’s application alone may take up a considerable portion of your free time. Make sure to factor in these points when planning your gap year."],
+      ["Speaker B", "There isn’t a hard and fast rule; it’s different for everyone. For me, I was sick to death with classrooms, homework assignments, and education. I needed to get out. So, I took two years away and lived abroad. It was the best thing for me. When I got back to university, I was rejuvenated. I felt fresh and had a lot more motivation to concentrate on education, and not on social life. I find that going with your gut feeling usually works out best."],
+      ["Speaker C", "A lot of colleges actually like when their students take a gap year. They usually perform better, are more involved in school, and are more mature. They also have a better idea of what they want to do. It can show schools that you are intentional. Colleges also value the diversity of students. Taking a gap year and travelling can give you a much more diverse perspective than other students who have lived domestically their whole lives."],
+      ["Speaker D", "Personally, I really benefited from taking a gap year. During my senior year of high school, I decided to apply for an exchange programme based in Germany. After being accepted, I was put into a German high school and lived with a host family. My time abroad not only helped me learn German, but also boosted my social and adaptation skills. Overall, it gave me a new perspective on how I wanted to treat myself and those around me."],
+      ["Speaker E", "I think it’s a good idea to apply to schools, get your scholarship information, and then talk to them about deferring your enrolment. This holds your spot, and your scholarships. It also takes the pain away from having to apply to schools during your gap year. And you always know if you have something you can come back to, which makes the gap year a little more freeing. Overall, it depends on whether or not a gap year is right for you. But when it comes to what schools think, you don’t have to worry."],
+      ["Speaker F", "My gap year influenced my university choice, as I discovered I didn’t like the American style of teaching. I also decided to switch what I wanted to major in university after finding a topic I was truly passionate about. I’ve only been studying at university for 2 years, but I’m extremely happy I took the opportunity of taking a gap year. I feel more motivated than I ever was in school, as now I have a major I’m excited to study. Without a gap year, I would’ve never made these decisions."]
+    ]
+  },
+  t2: {
+    statements: ["Peter enjoyed his holidays.", "Mary took a direct train to Warsaw.", "The hotel room was clean.", "Mary did not pay a lot for the hotel.", "The weather was supposed to be good.", "Mary spent a lot of time in restaurants and cafés.", "Mary and her friends had one dish for them all."],
+    key: "3213132",
+    script: [
+      ["Peter", "Hi, Mary! How were your holidays?"],
+      ["Mary", "Hello, Peter! Hmm, let’s say they could have been better."],
+      ["Peter", "Really? How come?"],
+      ["Mary", "Everything started when I was late for my train to Warsaw. I spent hours in a traffic jam, and then a few more standing in queues at the check-in barriers at the station."],
+      ["Peter", "Wait, were you carrying anything illegal?"],
+      ["Mary", "I sure wasn’t. The terminal was so jammed that I could barely breathe, and it was located at the far end of the platform... Anyway, if you want to know if I made it — I didn’t. The train departed and I was left standing at the platform. I had to pay twice as much to get a top bunk on the next one going to Warsaw through Berlin."],
+      ["Peter", "I hope that was the end of your troubles."],
+      ["Mary", "Are you kidding? That was just the beginning. I was going to meet my friends there, and they were responsible for our sleeping arrangements. The luxurious hotel they booked was not at all as grand as we expected. Our beds were not comfy, the paint was peeling off the ceiling now and then, and the bathroom was somewhat claustrophobic. Yet, shabby as it was, everything was spotless."],
+      ["Peter", "I suppose, you didn’t spend a fortune on it, so you could have just grinned and borne it. I mean it’s Warsaw after all! Did you at least go sightseeing?"],
+      ["Mary", "We did, and that was the best part of the trip. We visited all the most touristic places: the historic Old Town, the Royal Castle, and many others."],
+      ["Peter", "That sounds fun! Did you spend a lot of time outdoors?"],
+      ["Mary", "We didn’t. The forecast wasn’t that grim and we enjoyed the first couple of days, but then the weather deteriorated and stayed that way for the rest of the trip."],
+      ["Peter", "Oh, come on!"],
+      ["Mary", "Rain was pouring down every time we were heading somewhere."],
+      ["Peter", "Such a pity. But it means that you spent a great deal of time indoors. Have you tried out some local delicacies?"],
+      ["Mary", "Have you heard of Schnitzel?"],
+      ["Peter", "Is it a kind of a pork chop, coated in egg and breadcrumbs, and fried in hot oil with onion?"],
+      ["Mary", "It is. And it is often served with grated beetroot and mashed potatoes. It was undeniably delicious. And the portions were huge! We used to take one and share it between the three of us!"],
+      ["Peter", "I thought there were four of you."],
+      ["Mary", "There were. But Astrid is vegetarian, so no pork for her."],
+      ["Peter", "I see. Well, at least you liked something!"]
+    ]
+  },
+  t39: {
+    questions: [
+      { n: 3, q: "What do we learn about Joseph Evans at the beginning of the interview?", o: ["He is a renowned poet.", "He writes books for kids.", "He is criticised nationally."], a: "2" },
+      { n: 4, q: "The presenter always starts her shows by...", o: ["asking a particular question.", "giving a list of national awards.", "making her guests uncomfortable."], a: "1" },
+      { n: 5, q: "How many years did it take Joseph to write a story?", o: ["3", "5", "35"], a: "2" },
+      { n: 6, q: "What kind of heroes appeal to Joseph?", o: ["The controversial ones.", "Those who are full of themselves.", "The ones who are polite and reliable."], a: "1" },
+      { n: 7, q: "Why do male readers want to marry Brighty?", o: ["They like strong women.", "They consider it a challenge.", "They know what to expect of her."], a: "2" },
+      { n: 8, q: "What makes Brighty and Crawley a good team?", o: ["They complement each other.", "They make practical decisions.", "They never disagree with each other."], a: "1" },
+      { n: 9, q: "What is going to happen in the next couple of minutes in the interview?", o: ["Joseph will advertise his new book.", "Joseph will answer questions from the audience.", "Joseph will tell more about the life of Brighty and Crawley."], a: "2" }
+    ],
+    script: [
+      ["Presenter", "Good evening to you all and to our guest today, Joseph Evans."],
+      ["Joseph Evans", "Good evening."],
+      ["Presenter", "I don’t think that I need to introduce Joseph, a well-known novelist whose first novel about two young poets brought him national attention. Joseph’s The Swan Song won the National Book Critics Circle Award. And Joseph also won the Prize in Literature for children for his Mary’s Tales. So, Joseph Evans is in our studio today."],
+      ["Joseph Evans", "Thank you, Sophie. Don’t wait for me to blush at such an introduction, I did expect it. Your colleagues mentioned that you tend to start your shows like this, and you didn’t disappoint me."],
+      ["Presenter", "I should say that I will not disappoint the audience either, and will start the show with my usual question: what inspired you to write Mary’s Tales?"],
+      ["Joseph Evans", "It was a young girl. She wrote me a letter and complained that all the stories she read about fairies and witches included perfect little lady-like creatures which were always polite and never said a word to defend themselves. And she didn’t like that one little bit."],
+      ["Presenter", "Wow! So she gave you the idea, and you set off writing a story straight away?"],
+      ["Joseph Evans", "I wish I did, but it took time to develop. Actually, it took a long time to decide how. I needed to discover the main characters first. They had to grow out of a seed, as my mom would say. This didn’t happen for about three years. No, not three. I received the letter on the eve of my thirtieth birthday, and the book was published on the day of my thirty-fifth birthday."],
+      ["Presenter", "So — five years. You took your time, indeed."],
+      ["Joseph Evans", "I did."],
+      ["Presenter", "You did. But it was worth it, as your readers say. The heroes are not conventional at all. In fact, they are all quite flawed."],
+      ["Joseph Evans", "I think people who don’t have faults are very boring. Your faults are a large part of what you are like as a person. And the aim of any writer should be to make what they write interesting. So, if I can’t be interested in people with no faults, then neither can my readers. Mr Asparagus appealed to me because he is into both botanics and martial arts. And you must admit this is an odd combination. Laila is so sure of herself that you cannot pass by without paying her some attention. And of course Brighty is awesome because while other witches are polite and reliable, with her you never know what is going to happen next."],
+      ["Presenter", "This is so true. Your Brighty, the sorceress of the marshlands, has charmed many readers across the world. What do you make of that?"],
+      ["Joseph Evans", "The one strange fact about Brighty is that almost every young man who reads about her wants to marry her. They do. They all confess their wish quite openly. The other day I was doing a question-and-answer session, and a teenage boy put his hand up and asked me if I would mind if he would marry Brighty when he comes of age."],
+      ["Presenter", "What did you say?"],
+      ["Joseph Evans", "I wondered whether to ask him if he would mind everything being covered with frogs and lizards when the broomstick she was fixing went wrong. Or if he would mind being twisted round Brighty’s little finger when she needed something. Or would it worry him that she was always falling in love with other men; or... But I could see he regarded these facts as a test. So I told him to join the end of a very long queue of other young men and prepare himself to fight for what he desires."],
+      ["Presenter", "I guess this didn’t appear to trouble him unduly, did it?"],
+      ["Joseph Evans", "Not in the least. Personally, much as I love Brighty, she is the last person I would want to marry. I wouldn’t like to live with a person who has a tendency to do the opposite of what you might expect."],
+      ["Presenter", "Luckily, Brighty finds Crawley and they make a spectacular team."],
+      ["Joseph Evans", "Yes, they do! Where Brighty is dashing and original, Crawley is quite practical. He is good at covering up Brighty’s dashing blunders, in spite of disagreeing violently from time to time."],
+      ["Presenter", "Joseph, our listeners would like to know more about the book, and one of them is on the phone — but first a short commercial..."]
+    ]
+  },
+  t10: {
+    headings: ["Beautiful money", "Ideal indeed", "Rose family traits", "Discovering origins", "Many choices", "A flower of luxury", "A flower of conflict", "A symbol for all times"],
+    texts: [
+      "The rose is the most deeply ingrained flower in human history and human culture. It has been immortalised and integrated into music, festivals, poetry and even wars. It has been used as a sign of passion as well as grief. It is also the sign of human love, given on different occasions. William Shakespeare surely immortalised the rose for the world in 1597, in his play “Romeo and Juliet”, when Juliet so passionately said, “What’s in a name? That which we call a rose. By any other name would smell as sweet.”",
+      "All species of roses are naturally found throughout the Northern Hemisphere. Some 150 wild species are spread worldwide, from Alaska to Mexico, from Northern Africa to China. All roses are close relatives of cherries, apples, pears, raspberries, and plums. Most species of roses have long been cultivated for their hips, the fruit of the rose flower that has nutritional and medicinal value. A unique characteristic of all species of roses is its ability to bloom over and over again, from early summer to late autumn.",
+      "The Romans at first believed that the rose was useful as a source of natural medicines. Soon, the beautiful flowers became necessities at Roman festivals. Roman emperors demanded that their baths be filled with rose water, and they reclined on carpets of rose petals during their feasts. Perfumes made from roses became a high-priority treasure for the ruling elite, and it resulted in hardships among the peasant class, who were forced to grow roses instead of cultivating much needed food.",
+      "During the 15th century in England, the rose became the symbol of war between two families, both of whom had laid claim to the English crown. The War of the Roses lasted for 30 years and involved the House of York, whose symbol was the white rose, and the House of Lancaster, whose symbol was the red rose. Only in 1486, King Henry VII of the House of Lancaster, who was the first Tudor king, married Elizabeth of York, uniting the families and finally bringing the English civil war to an end.",
+      "In the 17th century, the rose became so valuable across Europe that it — along with rose water — was often used as currency. Roses were used to barter in market places across Europe, and commoners could pay their taxes to kings using roses and rose water. Josephine, wife of the Emperor Napoleon Bonaparte, created a great rose garden on the edge of Paris that contained over 200 varieties of the cherished rose. Most of the roses of Europe at that time were shades of pink or white until the early 19th century.",
+      "Roses have always been extremely popular all over the world, and fossil records show the presence of ancient roses in the Tertiary Period, which began about 70 million years ago. Where, exactly, first roses appeared is still unknown. It is often believed that roses were probably first cultivated in the royal gardens of ancient China about 5,000 years ago. In Ur, an ancient city of Mesopotamia, 3,000-year-old clay tablets contain the first known written reference about roses growing in gardens of the city.",
+      "Not all plants have perfect flowers. In a botanical sense a perfect flower is the one which has both male and female reproductive parts in the same structure. Lilies, roses, and apple flowers are perfect. Each flower possesses multiple ovaries that are located in a cup-like structure called a hypanthium. Leaves are located alternately on a stem that often has thorns. Five petals are typically found on the natural rose, while modern hybrid roses possess many more of the nice petals. The flower is admired for its wonderful scent."
+    ],
+    key: "8367142"
+  },
+  t11: {
+    title: "Spice Island",
+    parts: [
+      "Grenada offers a perfect taste of the Old Caribbean. Fragrant nutmeg, cinnamon, cloves, vanilla, and cocoa flourish in its fertile volcanic soil. That is why the island is often called the “Spice Island”. The island’s rich culture makes it a top choice for tourists ", "A",
+      ".\n\nSt. George’s is Grenada’s capital. It is one of the prettiest cities in the Caribbean, with its busy harbour ", "B",
+      ". For those tired of the noise of big cities, the quieter islands of Carriacou and Petite Martinique lie off the island’s northeast coast.\n\nMany visitors spend their time around Grand Anse Beach, ", "C",
+      " in the Caribbean. Water colours range from clear turquoise in the shallows, to deep cobalt blue, and the calm waters are perfect for swimming. This is also where tourists will find some of Grenada’s best resorts.\n\nGrenada offers more things to see and do ", "D",
+      ". Waterfalls gush in the island’s interior. Hiking trails thread through the lush rainforest. Coral reefs rim the coast, ", "E",
+      ". History experts will also enjoy exploring the country’s forts and museums, ", "F",
+      ".\n\nSo, the Caribbean island of Grenada is an excellent holiday destination and home to beautiful resorts. The island still grows and exports different spices like nutmeg, cloves, vanilla, cinnamon, and ginger."
+    ],
+    options: ["bustling with hundreds of sailboats", "which is one of the best beaches", "than booking one’s trip in advance", "than just sunbathing on its golden sands", "which are numerous and all special there", "where one can swim, dive, snorkel, and fish", "looking for an authentic Caribbean getaway"],
+    key: "712465"
+  },
+  t1218: {
+    title: "Slow down climate change",
+    text: [
+      "Rising sea levels. Raging storms. Searing heat. Ferocious fires. Severe drought. Punishing floods. The effects of climate change are already threatening our health, our communities, our economy, and our children’s future.",
+      "What can you do? A whole lot, as it turns out. Americans, on average, produce 21 tons of carbon a year, about four times the global average. Personal action is, of course, no substitute for meaningful government policies. We still must limit carbon pollution and move away from dirty fossil fuels and toward cleaner power.",
+      "But it’s important to remember the equally vital contributions that can be made by private citizens — which is to say, by you. “Change only happens when individuals take action,” says clean energy advocate Emily Dain. “There’s no other way, if it doesn’t start with people.” Here are some easy, effective ways each one of us can make a difference.",
+      "First, weatherize. Building heating and cooling are among the biggest uses of energy. Indeed, heating and air-conditioning account for almost half of home energy use. You can make your space more energy efficient by sealing drafts and ensuring it’s adequately insulated. In the USA it is possible to claim federal tax credits for many energy efficiency home improvements.",
+      "Next, invest in energy-efficient appliances. Since they were first implemented in 1987, efficiency standards for dozens of appliances and products have kept 2.3 billion tons of carbon dioxide out of the air. That’s about the same amount as the annual carbon pollution coughed up by nearly 440 million cars. Energy efficiency is the lowest-cost way to reduce emissions. When shopping for refrigerators, washing machines, water heaters, and other appliances, look for the Energy Eco label. It will tell you which of them are the most efficient.",
+      "And when you’re ready to swap out your old machines, don’t just put them on the curb. Recycling an old refrigerator through a special appliance disposal programme can prevent an additional 10,000 pounds of carbon pollution because the global-warming pollutants in the refrigerants and foam would be properly captured, rather than vented to the air.",
+      "Reduce water waste. Saving water reduces carbon pollution, too. That’s because it takes a lot of energy to pump, heat, and treat your water. So take shorter showers, turn off the tap while brushing your teeth, and switch to water-efficient appliances. It is estimated that if just one out of every 100 homes were equipped with water-efficient fixtures, about 100 million kilowatt-hours of electricity per year would be saved.",
+      "As for other spheres, eat the food you buy — and compost what you can’t. Approximately 10 percent of energy use goes into growing, processing, packaging, and shipping food — about 40 percent of which winds up in a landfill. If you’re wasting less food, you’re likely cutting down on energy consumption. As for the scraps you can’t eat or the leftovers you don’t get to, collect them in a compost bin instead of sending them to a landfill where they release methane. Recycling food and other organic waste into compost provides a range of environmental benefits, including improving soil health, decreasing greenhouse gas emissions, recycling nutrients, and mitigating the impact of droughts.",
+      "We need to make urgent changes to address the climate crisis — from adapting to the damage we can no longer avoid to preventing the worst-of-the-worst from happening. And while the urgency surrounding climate action should inspire us all into action — so should the progress we’re already making."
+    ],
+    questions: [
+      { n: 12, q: "According to the text, carbon emissions in the USA...", o: ["are about the same as in other developed countries.", "have risen four times in the last few years.", "are generally higher than in other countries.", "have been controlled by government policies."], a: "3" },
+      { n: 13, q: "The author thinks that the role of individuals in fighting climate change is...", o: ["as important as that of the governments.", "more necessary now than it used to be.", "vital in limiting carbon pollution.", "more essential than government policies."], a: "1" },
+      { n: 14, q: "What is the author’s advice about reducing the weather effects on energy use?", o: ["Turn down heating and cooling systems.", "Improve your home to use less energy.", "Ask for federal tax credits to compensate for the costs.", "Adjust heating and air-conditioning to the weather."], a: "2" },
+      { n: 15, q: "Them in “It will tell you which of them are the most efficient” (paragraph 5) most probably refers to...", o: ["emissions.", "special signs.", "electric devices.", "standards."], a: "3" },
+      { n: 16, q: "It is implied that reducing water use...", o: ["saves more water for areas with lack of rain.", "is connected with energy-efficient equipment.", "is beneficial only if many people do it.", "results in fewer harmful gasses in the atmosphere."], a: "4" },
+      { n: 17, q: "Which benefit of composting food is NOT mentioned in the text?", o: ["Decreasing landfill waste.", "Reducing harmful gasses.", "Making the land better.", "Lessening the harm of poor rainfall."], a: "1" },
+      { n: 18, q: "What is the main aim of the article?", o: ["Tell the reader how to adapt to climate change.", "Inspire climate activists to act urgently.", "Explain to the officials how to change policies.", "Call individuals for action to reduce energy use."], a: "4" }
+    ]
+  },
+  g1924: {
+    title: "The Seven Wonders of Russia",
+    items: [
+      { n: 19, pre: "Have you heard of the Seven Wonders of Russia? A project", post: "by the newspaper Izvestia, Radio Mayak and the television channel Russia set out to establish the seven most amazing natural and man-made wonders of our vast and awe-inspiring country.", base: "ORGANISE", ans: ["organized", "organised"] },
+      { n: 20, pre: "The top one is Lake Baikal. It", post: "in southern Siberia.", base: "LOCATE", ans: ["islocated", "'slocated", "’slocated"] },
+      { n: 21, pre: "It is the largest freshwater lake by both depth and volume in the world,", post: "nearly a quarter of the world’s fresh surface water — that’s more than North America’s Great Lakes combined.", base: "CONTAIN", ans: ["containing"] },
+      { n: 22, pre: "The Peterhof Palace is also on the list of the Seven Wonders of Russia. It is in fact a series of palaces and gardens located in Peterhof, St. Petersburg,", post: "out on the orders of Peter the Great.", base: "LAY", ans: ["laid"] },
+      { n: 23, pre: "", post: "palaces and gardens are sometimes referred to as the “Russian Versailles”. There are 64 fountains in the Grand Cascade of the palace.", base: "THIS", ans: ["these"] },
+      { n: 24, pre: "The", post: "fountain is called the Samson Fountain and it commemorates Russia’s victory over Sweden in the Great Northern War. The fountain depicts the moment when Samson tore the jaws of the lion. The lion is an element of the Swedish coat of arms.", base: "LARGE", ans: ["largest"] }
+    ]
+  },
+  g2529: {
+    title: "Building Stonehenge",
+    items: [
+      { n: 25, pre: "Stonehenge is perhaps the world’s most famous prehistoric monument. It is a masterpiece of", post: ", built using only simple tools and technologies, before the arrival of metals and the invention of the wheel.", base: "ENGINEER", ans: ["engineering"] },
+      { n: 26, pre: "Building the stone circle would have needed hundreds of people to transport, shape and erect the stones. These builders would have required others to provide them with food, to look after their children and to supply", post: "including hammerstones, ropes, antler picks and timber.", base: "EQUIP", ans: ["equipment"] },
+      { n: 27, pre: "The whole project would have needed", post: "planning and organisation.", base: "CARE", ans: ["careful"] },
+      { n: 28, pre: "You may take an", post: "tour of Stonehenge with 360-degree view from inside the stones, which shows the monument’s key features and its history.", base: "ACTIVE", ans: ["interactive"] },
+      { n: 29, pre: "You may also explore detailed images which", post: "the erection and changes of Stonehenge and nearby monuments from the early Neolithic period to the Bronze Age.", base: "CONSTRUCT", ans: ["reconstruct"] }
+    ]
+  },
+  l3036: {
+    title: "Kevin",
+    parts: [
+      "Kevin Mason had risen early, excited by the prospect of his first day as deputy chairman of the new company. His first meeting that day was scheduled for twelve o’clock, when Lucas would ", 30,
+      " him about his progress with a new novel. Kevin planned to publish the book in April, and was delighted that he ", 31,
+      " to persuade Lucas to go on tour to promote the book. After a light breakfast Kevin read the article in the Times for a second time. He was pleased to see his new partner repeating something he’d said to Kevin many times: I am proud to be joining a publishing house with such a fine literary tradition.\n\nAs it was a clear, crisp morning, Kevin decided to walk to work and savour the thought of starting life anew. He ", 32,
+      " how long it would be before his father understood the situation. He wanted his father to ", 33,
+      " that Kevin had made the right decision if the company were to play in the major leagues. He crossed the road, his smile broadening with each ", 34,
+      " he took. As he walked towards the familiar building, he noticed two smartly dressed doormen standing at the entrance. Not an expense his father would have ", 35,
+      " of. One of the men stepped forward and saluted.\n\n“Good morning, Mr Mason.” Kevin was ", 36,
+      " that they knew his name. “We have been instructed, sir, not to allow you to enter the building.” Kevin was struck dumb."
+    ],
+    items: {
+      30: { o: ["say", "tell", "speak", "talk"], a: "2" },
+      31: { o: ["achieved", "fulfilled", "succeeded", "managed"], a: "4" },
+      32: { o: ["wondered", "wandered", "warned", "wasted"], a: "1" },
+      33: { o: ["adapt", "admit", "adopt", "assume"], a: "2" },
+      34: { o: ["move", "pace", "step", "walk"], a: "3" },
+      35: { o: ["supported", "admired", "appreciated", "approved"], a: "4" },
+      36: { o: ["improved", "influenced", "impressed", "interested"], a: "3" }
+    }
+  }
+};
+SPEAK_VARIANTS.v16 = {
+  t1: { text: "The fashion industry is considered to be one of the fastest-growing industries today, yet it has faced some significant challenges throughout its history. It’s not a secret that fashion industry takes its negative toll on the environment. Clothes production cannot cope with limited water consumption, and its carbon footprint increases daily. People buy tons of cheap garments which end up in landfills in less than a month. The situation might get worse if consumers don’t change their habits in the coming years.\n\nThere are some healthy fashion trends that may help to make fashion sustainable. Consumers are choosing brands that do not hurt animals and the planet in the process. The younger generation chooses second-hand shopping giving clothes another life. And brands promote recycling to save on raw material and natural resources." },
+  t2: { title: "Enjoy music with us!", img: "img/ege-v16-ad.jpg", intro: "You are considering going to the open-air music concert and now you’d like to get more information. In 1.5 minutes you are to ask four direct questions to find out about the following:",
+    points: ["location", "ways to get there", "group discounts", "accommodation nearby"],
+    keys: [/where|located|location|address|place/i, /get there|bus|train|metro|transport|how .*get/i, /discount|group|cheaper|reduc/i, /accommodation|hotel|stay|camp|sleep/i] },
+  t3: { topic: "health issues", intro: "Hello everybody! It’s the Teenagers Round the World Channel. Our guest today is a teenager from Russia and we are going to discuss health issues. We’d like to know our guest’s point of view on this issue. Please answer five questions. So, let’s get started.",
+    qs: ["Do you often catch a cold? When was the last time you fell ill?", "What health facilities are available in your home town?", "Do you think people nowadays are healthier than they used to be in the past? Why do you think so?", "In your opinion, what are the most frequent health problems with young people in your country?", "What should parents do to encourage teenagers to take care of their health?"],
+    outro: "Thank you very much for your interview." },
+  t4: { project: "The best way to travel", photos: ["img/ege-v16-photo1.jpg", "img/ege-v16-photo2.jpg"],
+    plan: ["explain the choice of the illustrations for the project by briefly describing them and noting the differences;", "mention the advantages (1–2) of the two types of travelling;", "mention the disadvantages (1–2) of the two types of travelling;", "express your opinion on the subject of the project — say which way of travelling presented in the pictures you’d prefer and why."] }
+};
+egeWriting("v16", {
+  e37: { friend: "Wendy", pron: "her", subject: "End-of-the-year dance party", letter: "…I am graduating from school this year and we are going to organise a big dance party at the end. What kind of a graduation party are you going to have? Is it held at school? Do parents attend these parties, why or why not?\n\n…Also, I can’t wait to celebrate my graduation with my family…",
+    task: "ask 3 questions about celebrating her graduation with the family", qTopic: "о празднике выпуска с семьёй", topicWords: ["family", "celebrate", "graduation", "restaurant", "party", "presents", "where"], pages: "с. 183",
+    checks: [["Какой у тебя будет выпускной", /\b(party|ball|prom|graduation|dance|restaurant)\b/i], ["Проходит ли он в школе", /\b(school|hall|restaurant|boat|held)\b/i], ["Приходят ли родители и почему", /\b(parents?|attend|come|because)\b/i]] },
+  t381: { label: "Part-time jobs", prompt: "Imagine that you are doing a project on why Zetland teenagers have part-time jobs. You have found some data on the subject — the results of a survey conducted among Zetland teenagers (see the table below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "Why do you have a part-time job?", colHead: "Number of teenagers (%)", table: [["Getting work experience", 33], ["Gaining extra money", 30], ["Developing some skills", 21], ["Meeting new people", 9], ["Boosting confidence", 7]],
+    problem: "outline a problem that can arise with having a part-time job for teenagers and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the advantages of working part-time for teenagers.", pages: "с. 183–184" },
+  t382: { label: "New hobbies", prompt: "Imagine that you are doing a project on the new hobbies Zetlanders would mostly like to try. You have found some data on the subject — the results of a survey conducted among Zetlanders (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What new hobby would you like to try?", table: [["Photography", 31], ["Dancing", 26], ["Gardening", 24], ["Drawing", 13], ["Pottery", 6]],
+    problem: "outline a problem that can arise with starting a new hobby and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the role of hobbies in our lives.", pages: "с. 184" }
+});
+
+/* ===================== ЕГЭ 2027 · ВАРИАНТ 17 =====================
+   Source: ЕГЭ 2027 (ФИПИ), written part pp. 185–195, oral part pp. 261–262, listening scripts pp. 326–330, oral Task 3 script p. 350,
+   key p. 357. OCR of the scan, checked against the page images (words under the watermark restored from the page context).
+   Listening: there is no recording of this variant in Natali’s files — read by the computer voice. */
+EGE_VARIANTS.v17 = {
+  id: "v17", title: "Вариант 17",
+  t1: {
+    statements: ["I really wanted to work but my parents talked me out of it.", "Having a weekend job is useful in several ways.", "Combining work and studies is too much for teenagers.", "Working hours influence your attitude to a job.", "It’s parents’ duty to provide for their children’s needs.", "Teenagers should discuss with parents if they need a job.", "You can get ready for adult life even without work."],
+    key: "371245",
+    script: [
+      ["Speaker A", "I think that the situation when parents are forcing teenagers to get a job is just terrible. High school hours are mostly from 6 to 3, or from 7 to 4, or somewhere in that range — it varies throughout the world. And you’re trying to tell your child to go to work for 5–10 hours right after school? That is poor parenting. The struggles of school and the weight that comes with it — whether it is the workload, the tests, or depression from it all — are already enough."],
+      ["Speaker B", "My parents had a rule that school always came first. No job — because school was my job. In the summers I had to do something though. It was either more school, or some type of volunteer activities. I didn’t have a job until my third year university summer, and felt prepared for adulthood just fine. I know parents do it to prepare for adulthood, but let your children enjoy their final years of childhood while they get ready for college (if they’re going). It’s no good applying extra stress onto them."],
+      ["Speaker C", "When I was in high school, I needed money for college and we didn’t have a lot of money to go around. I was super eager to get a job, but my dad actually said to me, “Wait as long as you can before getting a job. Once you start working, you don’t stop until you retire.” All my friends started getting jobs at 14 or 16. I was 18 when I got my first “real” job (granted, I also worked for my mom’s store and my dad’s business and had summer jobs). I can’t thank him enough for telling me it was okay."],
+      ["Speaker D", "I agree that making your children work from the time they get out of class until the end of the day is a little too much. I see no problem with a weekend job though. It does give some good experience in the work world, as well as giving kids some financial freedom. I had a weekend job in high school. So it felt amazing not to have to ask my mom to use her card whenever my friends wanted to get something to eat, or whenever I needed a new oil change for my car. I could just do it."],
+      ["Speaker E", "I worked at a hairdresser’s and in a burger van in high school. The first experience at the hairdresser’s in the mornings and in the summer was useful, I would say, to get experience and get me up in the mornings. I still had my summer afternoons and evenings to hang out with my friends and enjoy life. So during that time, I didn’t miss out on much because my friends would be sleeping in while I was at work. But the night job at the burger van was quite hard."],
+      ["Speaker F", "I worked at high school and was used to having my own money, while all my friends got pocket money. So without a job, I’d miss out on the cinema, ice skating, fast food, bowling, and so on. But because I had to go to work, I missed out on loads anyway. Looking back, all the jobs I did in school paid very little. So, in an ideal world, teens should only do some jobs for experience, and their parents should give them pocket money. Financial support is part of their responsibility as parents."]
+    ]
+  },
+  t2: {
+    statements: ["Mary and Jack came together to the meeting.", "Volunteering helped Mary’s mom to become more confident.", "Jack’s dad used to be a volunteer while at school.", "Volunteering helped Jack to make new friends.", "Mary read the leaflet from cover to cover.", "Last year Jack volunteered at the local hospital.", "Mary speaks French fluently."],
+    key: "2131233",
+    script: [
+      ["Mary", "Hi, Jack! I didn’t expect to see you here today."],
+      ["Jack", "Hello, Mary! A pleasant surprise, isn’t it? How are you doing?"],
+      ["Mary", "All in all — fine, I guess. I’m glad I ran into you. This is my first time attending such an event. Would you keep me company?"],
+      ["Jack", "Absolutely! Let’s take a seat. So, why volunteering?"],
+      ["Mary", "Well, my mom volunteered when she was at school. She had to communicate with so many people that it helped her to overcome her shyness. It seems that I have a similar issue. Mom calls it ‘an awkward self-consciousness of adolescence.’ So, here I am — following in my mom’s footsteps. What about you?"],
+      ["Jack", "Oh, I enjoy interacting with others, and a bunch of regular meetings is part and parcel of volunteering. It allowed me to make many friends from other schools last year."],
+      ["Mary", "It seems like volunteering brings people together. Do you know the projects our school participates in?"],
+      ["Jack", "Didn’t you read the brochure before coming here? It’s all there."],
+      ["Mary", "Nope, I didn’t have time."],
+      ["Jack", "Well, there are roles within the local community where you work mainly with people from our area, and support them with some tasks in their daily lives. These are based mostly in hospitals, health centres, and libraries."],
+      ["Mary", "I don’t think those ones are for me. I’m not into health or working with the elderly."],
+      ["Jack", "Then probably you can make a difference at our school — helping primary school students."],
+      ["Mary", "What does it include?"],
+      ["Jack", "You can become their reading partner and help them turn into proficient readers. Or, if you are of the artistic mind — which you are, as I know — you can tutor them in drama or give free art lessons."],
+      ["Mary", "Should I have good grades?"],
+      ["Jack", "I’m not sure, but I would say that’s taken for granted. You may ask Ms Rodrigez. I’m sure she knows the answer."],
+      ["Mary", "I see... Is there anything that can take me outside our town?"],
+      ["Jack", "I’m not sure about this year, but two years ago they offered a few places at a rainforest conservation programme in Costa Rica."],
+      ["Mary", "Wow, that sounds like just what I need — living in the heart of the jungle, meeting jaguars, riding sea turtles..."],
+      ["Jack", "Hey, daydreamer, you should stop right here unless your second language is Spanish. It was a must, if I’m not mistaken."],
+      ["Mary", "I’ve been studying French for some time, but I can take up Spanish classes as well. Oh, look, the meeting is about to start."],
+      ["Jack", "Yeah, let’s listen."]
+    ]
+  },
+  t39: {
+    questions: [
+      { n: 3, q: "How often does the programme run?", o: ["Every day.", "On weekdays.", "On weekends."], a: "2" },
+      { n: 4, q: "What do we learn about Geoffrey Caedmon at the beginning of the interview?", o: ["He is a researcher.", "He is a famous actor.", "He is a film director."], a: "1" },
+      { n: 5, q: "Geoffrey believes that cancelling trips to the theatre...", o: ["helps to see it fully.", "is beneficial for students.", "has negative consequences."], a: "3" },
+      { n: 6, q: "Which of the following is NOT mentioned as a benefit of seeing live theatre?", o: ["Increased literary knowledge.", "Ability to recognise their inner world.", "Higher understanding of the world around them."], a: "2" },
+      { n: 7, q: "How many students could justify the actions of Chatsky after reading the book?", o: ["65%", "79%", "83%"], a: "1" },
+      { n: 8, q: "People react differently to movies and live plays because...", o: ["in-person experience makes emotions stronger.", "actors perform differently on stage and on a screen.", "emotions are developed through personal connections."], a: "1" },
+      { n: 9, q: "According to Geoffrey, what is the long-lasting effect of arts education on students?", o: ["It inspires them to study more arts.", "It develops their logical thinking.", "It improves their academic results."], a: "3" }
+    ],
+    script: [
+      ["Presenter", "Hello, everybody! My name is Sandy Brior. Welcome to our regular programme about arts and literature. We came back on Monday, after our usual break for weekends, to talk about what should be done if you wish to be an orchestra conductor. On Tuesday, we discussed the release of the Dolly the Beast book. Thursday and Friday will be devoted to museums and art galleries, but today, Wednesday, March 19th, we’ll dive into theatre with our expert, Geoffrey Caedmon. Hello, Geoffrey."],
+      ["Geoffrey Caedmon", "Hi, Sandy. I’m pleased to be here today."],
+      ["Presenter", "The pleasure is mine, Geoffrey. I should admit that Geoffrey is neither a film director, nor an actor. You might wonder then what he is doing in the studio today. Well, let’s ask Geoffrey. So, Geoffrey, who are you?"],
+      ["Geoffrey Caedmon", "You’re right, I’m none of those, even though I used to play on stage at school. I work for the University doing research on various issues connected with education and arts."],
+      ["Presenter", "While preparing for the interview, I found out that schools nowadays are reducing their arts budgets and cancelling trips to theatres. Does this have a positive or negative influence on students?"],
+      ["Geoffrey Caedmon", "Sandy, before going into details, I wanted to remind those of our listeners who didn’t have a chance to go to the theatre with their school class, that it used to be a traditional school practice some 10 years ago. Not only was it a chance to take a break from school and have some fun, but it also had many additional educational benefits. So, I’d say that this is indeed a step in the wrong direction, as investing time into the arts has demonstrated its importance in developing well-rounded learners."],
+      ["Presenter", "So, what are the benefits of taking students to the theatre?"],
+      ["Geoffrey Caedmon", "Research suggests that it improves students’ knowledge of literature, increases tolerance and empathy, and develops students’ emotional intelligence. Theatre acts as a window to a broader world by showing them different perspectives and experiences."],
+      ["Presenter", "But isn’t watching a movie the same?"],
+      ["Geoffrey Caedmon", "It may be easier and more cost effective to have students watch the movie version of a play — however it does not have the same effects. It turned out that reading and watching movies of Romeo and Juliette by Shakespeare, and Woe from Wit by Griboedov, did not trigger the same increase in knowledge experienced by students who attended live performances of the same plays. Of those who saw the live play, 79% could identify which characters were Romeo’s friends, compared to only 38% of those students who watched the movie. As for Woe from Wit, 83% of students who watched the play at the theatre could easily justify the actions of both Chatsky and Sophia, compared to 65% who read the book."],
+      ["Presenter", "Why is that so?"],
+      ["Geoffrey Caedmon", "The way we respond to people performing a story on stage is different from how we react to seeing the same performance on a screen. This could be because being present in person can lead to stronger emotional connections. That is why watching movies does not have the same impact on our emotional intelligence as live theatre."],
+      ["Presenter", "Am I right in assuming that arts education should become part and parcel of school curricula?"],
+      ["Geoffrey Caedmon", "Arts education is essential for developing creative thinking skills. Students who are involved in the arts tend to explore all possible solutions to come up with creative ideas. Arts education helps them develop into autonomous and resourceful learners by encouraging them to think outside the box. This, in the long run, impacts every subject students are involved in. So, answering your question, yes, integrating arts education is essential and should once again be given a higher priority."],
+      ["Presenter", "Thank you, Geoffrey, for your inspirational answers. I hope more students will get a chance to visit theatres with their schools, and learn to see beyond their own horizons."]
+    ]
+  },
+  t10: {
+    headings: ["Fighting without rules", "A natural hunter", "Home, sweet home", "What’s on the menu?", "Unique habits", "Most caring mothers", "Asking for protection?", "What’s a kangaroo like?"],
+    texts: [
+      "Most kangaroos live on the continent of Australia, though each species has its own favourite place for living. For example, the musky rat-kangaroo likes to nestle down in little nests on the floor of the rainforests in northeastern Queensland. Gray kangaroos like the forests of Tasmania. The antilopine kangaroo can be found in the eucalyptus woodlands of extreme northern Australia. Small tree-kangaroos live in the upper branches of trees in the rainforests of Queensland, as well as on the island of New Guinea.",
+      "Kangaroos are the only large animals that hop to move around. Their springy hind legs and feet are much stronger and larger than their arms. Kangaroos can cover 7 metres in a single hop, and can hop as fast as 48 km/h. They are one and only animals for whom hopping is primary form of movement. When feeding, kangaroos use a slower, walking movement, and for that they use their muscular tail, pushing off the ground as they move along. Kangaroos are social animals. They live in groups called a mob, a herd or a troop. Kangaroos in a mob will groom each other and protect each other from danger.",
+      "Probably the best-known fact about kangaroos is that they carry their young in a pouch. A female kangaroo can give birth to up to four offspring at one time, though this is unusual. At birth, the baby, called a joey, can be as small as a grain of rice. When the joey is born, it is guided safely into the comfy pouch, where it develops for another 4 to 15 months. Inside the pouch, the joey is protected and fed with milk. Joeys grow quickly, and at 14 to 20 months for females, or 2 to 4 years for males, they will be fully matured.",
+      "According to the Red List of Threatened Species, 16 species of tree-kangaroos and rat-kangaroos are listed as either near-threatened, threatened, vulnerable, endangered or critically endangered. The desert rat-kangaroo and the short-nosed rat-kangaroo are considered completely extinct. Current studies show that global warming could also kill off the world’s smallest kangaroo. However, the four species of great kangaroos — the species that are much larger than other kangaroos — are not endangered.",
+      "Kangaroos are large marsupials that are found only in Australia. They are identified by their muscular tails, strong back legs, large feet, short fur and long, pointed ears. Like all marsupials — a sub-type of mammal — females have pouches where their young live until they are old enough to emerge. According to National Geographic, the largest kangaroo, as well as the largest marsupial, is the red kangaroo. The smallest kangaroo is the musky rat-kangaroo. It is only 15 to 20 cm long, and weighs 340 grams.",
+      "Kangaroos are mainly herbivores. They eat grasses, flowers, leaves, ferns, moss, and even insects. Like cows, kangaroos bring their swallowed food up again to the mouth and re-chew it before it is ready to be totally digested. Great kangaroos mainly roam forests in search of food, though they do go to open grasslands for grazing. Small species, like rat-kangaroos, eat worms, roots, and palm berries. The animal sits on its haunches while eating and finds food by digging. They are solitary, but have been seen feeding together.",
+      "Large male kangaroos are powerfully built. Like many species in the wild, male kangaroos sometimes fight over potential mates. They often lean back on their sturdy tail and kick each other with their strong hind legs. Kangaroos can also bite and wield sharp claws, which they may do in battle with an enemy, such as a dingo. If a kangaroo suspects that there is some danger in the area, it will stomp its foot on the ground to alert others. If it comes to blows, a kangaroo will skilfully box and kick its opponent."
+    ],
+    key: "3567841"
+  },
+  t11: {
+    title: "Great Wall of China",
+    parts: [
+      "“Nobody can be a true hero unless he has been on the Great Wall” goes the popular Chinese saying. It clearly demonstrates the importance ", "A",
+      ".\n\nThe magnificent Great Wall of China is known in Chinese as “Changcheng”, or the “Long Wall”. The wall stretches more than 6,000 kilometres, from the fortresses of Shanhaiguan in the east, all the way to Jiayuguan in the west, passing through Hebei, Tientsin, and Beijing, ", "B",
+      ".\n\nThe Great Wall of China rises as high as 16 metres, ", "C",
+      " or 10 men to pass. The wall boasts numerous battlements and watchtowers. Some of the wall’s oldest fortifications date back as far as the 7th century BC, with the best-known areas added around 210 BC, ", "D",
+      ".\n\nToday, the most visited section of the wall is near Badaling Pass, northwest of Beijing, ", "E",
+      " or organised tours. Other restored sections worth a visit include the section near Gubeikou, 130 kilometres from Beijing, and in Mutianyu, just 70 kilometres northeast of Beijing.\n\nTo conclude, the Great Wall of China is a must-visit attraction in China. The Great Wall is a building project ", "F",
+      " in human lives, blood, sweat, and tears. It deserves its place among “the New Seven Wonders of the World” and the UNESCO World Heritage Sites."
+    ],
+    options: ["and it is wide enough in places for five horses", "when its various sections were joined together", "that is placed upon this unique ancient monument", "when the first fortifications of the wall appeared", "which is easily reached by public transport", "that had the longest duration and greatest cost", "where the best-preserved sections can be visited"],
+    key: "371256"
+  },
+  t1218: {
+    title: "Should students join clubs on campus?",
+    text: [
+      "Student clubs are an important part of the social and emotional development of young adults. Engagement in student organisations and activities can further develop self-awareness, self-management, and foster empathetic connections with others.",
+      "I recognise a few downsides to the number of student organisations on my campus, especially in how resume-building opportunities appear to drive these numbers more often than a personal desire to help your community. But that doesn’t outweigh the positive impact such memberships can have on social and emotional development for college students and on boosting their soft skills. Soft skills are “people skills” that allow us to effectively interact with others, like communication and work ethic.",
+      "Campus clubs are spaces where students are encouraged to be themselves, make potential mistakes, miss deadlines, and use their experiences to grow in a supportive environment. Joining a student organisation presents many opportunities to learn more about yourself, your goals and your strengths. You can learn from how others handle certain situations and test your current knowledge. You can also find out what you’re good at, whether that’s multitasking, staying organised, generating ideas, or serving others. This self-awareness will be beneficial in your future career.",
+      "Some of my peers have mentioned the issue of over-committing when they’re pressured to be involved. When classroom work increases and time feels like it’s running out, it may feel like there is no other option than to drop a commitment or two. In my experience, many student clubs welcome conversations about needing some time. In spaces run by others who may be struggling with work-life balance, I have never had a club tell me that stepping back isn’t an option or that there won’t be space for me when I feel ready to return. From sports and wellness focused organisations to cultural, or creative groups, there is space for everyone in a student club on my campus if students choose to seek out those opportunities.",
+      "On the other hand, student clubs don’t really foster a community. They divide the student base. While student clubs can bring a sense of community to students, oftentimes this creates a problem for students with social anxiety to feel that they can fit in. When there are a lot of different student groups, it can become overwhelming to attempt to fit in with the rest of the crowd.",
+      "Many student clubs also require funding in some part from students, or at least investment from students to fully participate in their group, which becomes a factor that may leave those who join the clubs left out.",
+      "Some student clubs promote themselves as good job experience for the real world. But resources to help students succeed in life should be available to students from the outside. Additionally, student clubs require a time investment to reach these opportunities. This allows for the attitude of earning one’s way to an advantageous position in society when it all comes down to knowing the right person. Thus, the problem of alienation goes beyond how many people someone can know around campus. Shouldn’t success be valued on the effort someone makes, and not on the luck of knowing the name of a different person of repute?",
+      "If you want to assist the community, seek ways to increase the benefit toward those outside of your set social circle to see how many people the campus community really has that can benefit from your resources — both formal and informal. Student clubs are a great way to contribute, but only if they create an inclusive environment."
+    ],
+    questions: [
+      { n: 12, q: "What does the author say about the disadvantages of student clubs?", o: ["Attending student clubs is not enough for building a good resume.", "Students join clubs to improve their resume rather than to satisfy their interest.", "There are more disadvantages than advantages of joining a student club.", "There are some minuses if you choose the wrong student organisation."], a: "2" },
+      { n: 13, q: "Student clubs are characterised in the text as a place where students...", o: ["learn multitasking.", "fail to make mistakes.", "follow others’ examples.", "develop their skills."], a: "4" },
+      { n: 14, q: "What is the author’s advice if you are short of time?", o: ["Seek a club that requires less time.", "Tell the club members that you lack time.", "Choose a sport or wellness organisation.", "Learn to say ‘no’ to more commitments."], a: "2" },
+      { n: 15, q: "Which problem of student clubs is NOT mentioned in paragraph 5?", o: ["Too many people joining clubs.", "Feeling worried about working with others.", "An enormous diversity of groups.", "A lack of community spirit."], a: "1" },
+      { n: 16, q: "It is implied that student clubs that require funding...", o: ["become too demanding for some members.", "should be sponsored by the university.", "make it impossible for some to join them.", "are difficult to manage logistically."], a: "1" },
+      { n: 17, q: "What is the author’s attitude to clubs that promote themselves as ‘good job experience for the real world’?", o: ["They provide good resources for success.", "They are great for making connections.", "They create the wrong idea of success.", "They trick students into investing time."], a: "3" },
+      { n: 18, q: "What is the main idea of the article?", o: ["Joining student organisations is a must for every student.", "Joining the right club can benefit your future career.", "Student clubs should serve the whole campus community.", "Student clubs should use university resources wisely."], a: "3" }
+    ]
+  },
+  g1924: {
+    title: "The Valley of Geysers · The Manpupuner Rock Formations",
+    items: [
+      { n: 19, pre: "The Valley of Geysers. This geyser field on the Kamchatka Peninsula is on the list of the Seven Wonders of Russia. It has the", post: "largest concentration of geysers in the world (90 in total) and many hot springs.", base: "TWO", ans: ["second"] },
+      { n: 20, pre: "It forms part of the Kronotsky Nature Reserve, which in turn", post: "in the World Heritage Site known as the Volcanoes of Kamchatka.", base: "INCLUDE", ans: ["isincluded"] },
+      { n: 21, pre: "The valley is difficult to reach, with helicopters", post: "the only possible means of transport.", base: "PROVIDE", ans: ["providing"] },
+      { n: 22, pre: "The Manpupuner Rock Formations. The unique rock formations are also on the list of the Seven Wonders of Russia. These are a set of seven gigantic, abnormally shaped stone pillars", post: "west of the Ural Mountains in the Komi Republic.", base: "LOCATE", ans: ["located"] },
+      { n: 23, pre: "They are also known as the Seven Strong", post: "Rock Formations or Poles of the Komi Republic. According to a local legend, the stone pillars were once Samoyed giants walking through the mountains to Siberia to destroy the Mansi people.", base: "MAN", ans: ["men"] },
+      { n: 24, pre: "However, upon seeing the holy Mansi mountains, the shaman of the giants dropped his drum and all of them", post: "into the stone pillars.", base: "FREEZE", ans: ["froze", "werefrozen"] }
+    ]
+  },
+  g2529: {
+    title: "Apethorpe Palace",
+    items: [
+      { n: 25, pre: "Apethorpe Palace is one of England’s greatest country houses. It holds a particularly important place in English history because of its", post: "by Tudor and Stuart monarchs.", base: "OWNER", ans: ["ownership"] },
+      { n: 26, pre: "Elizabeth I once owned the building, which she had inherited from Henry VIII. For a period, Apethorpe was a royal palace", post: "lived in by James I and Charles I.", base: "REGULAR", ans: ["regularly"] },
+      { n: 27, pre: "James I so loved Apethorpe that he personally contributed to its extension to make it more", post: "for hunting in the nearby royal forest of Rockingham.", base: "SUIT", ans: ["suitable"] },
+      { n: 28, pre: "The resulting series of state rooms, including the King’s Bedchamber and the Long Gallery, is one of the most complete", post: "to survive from this period.", base: "IMPRESS", ans: ["impressive"] },
+      { n: 29, pre: "Apethorpe Palace is a private", post: "but is open to the public by pre-booked guided tours during July and August.", base: "RESIDE", ans: ["residence"] }
+    ]
+  },
+  l3036: {
+    title: "The house near the lake",
+    parts: [
+      "In spring Sofia decided to rent a house. The house that Sofia rented at Lake Bala was even better than she ", 30,
+      " from when she drove up to see it, along with several others. It was a big beautiful old home. Obviously, it was well looked ", 31,
+      ". It belonged to a family whose children had ", 32,
+      " up and now had children of their own, according to the realtor. They still used it in August, but had decided to rent it in July for the first time.\n\nThe house was big and comfortable. There were six cozy bedrooms, a bunk room on the top floor, enough bathrooms for everyone, a huge living room and dining room downstairs on the main floor with fireplaces tall enough to stand in, wooden beams and panelling throughout the house. What Sofia liked very much was a big, old-fashioned kitchen where you could ", 33,
+      " prepare meals for an army. And down the slope at the edge of the lake, there was a boathouse with two speedboats in it, a sleek modern one and an old wooden dock that had been impeccably cared ", 34,
+      ".\n\nThe whole property was ringed with beautiful old trees, and there was a tennis court behind the house that had been built fairly recently for teenaged grandchildren. Sofia’s granddaughter was ", 35,
+      " when she saw the house, and ran from room to room trying to decide which one to sleep in. Sofia was happy that she could ", 36,
+      " to rent this house."
+    ],
+    items: {
+      30: { o: ["revised", "reviewed", "remembered", "reminded"], a: "3" },
+      31: { o: ["before", "after", "for", "over"], a: "2" },
+      32: { o: ["grown", "raised", "brought", "risen"], a: "1" },
+      33: { o: ["really", "merely", "hardly", "rarely"], a: "1" },
+      34: { o: ["after", "of", "off", "for"], a: "4" },
+      35: { o: ["enjoyed", "thrilled", "adored", "preferred"], a: "2" },
+      36: { o: ["allow", "achieve", "approve", "afford"], a: "4" }
+    }
+  }
+};
+SPEAK_VARIANTS.v17 = {
+  t1: { text: "A polar bear walks along a rocky shore, looking for food. The bear would usually be on the sea ice hunting for seals, pouncing when the seal comes up to breathe. But the ice has started to melt earlier and re-form later than it was in the past. Without the sea ice, the polar bear must scavenge for other, less nutritious food. These changes in polar sea ice are a result of climate change. But this isn’t just affecting polar bears — climate change affects everyone.\n\nChanges in Earth’s climate are caused by how much of the Sun’s energy is absorbed by the atmosphere. In fact, over the past 650,000 years, our planet has gone through seven ice ages and warming periods. But during the past few hundred years, oil, gas, and coal have powered homes, cars, and factories. That increases Earth’s temperature, which contributes to the planet’s warming." },
+  t2: { title: "Art workshop: come & enjoy!", img: "img/ege-v17-ad.jpg", intro: "You are considering joining the art workshop and now you’d like to get more information. In 1.5 minutes you are to ask four direct questions to find out about the following:",
+    points: ["location", "price for one", "skills needed", "age limitations"],
+    keys: [/where|located|location|address/i, /how much|price|cost/i, /skills?|experience|need to|able to|beginners?/i, /how old|age|years old/i] },
+  t3: { topic: "how young people choose their career", intro: "Hello everyone! It’s the Teenagers Round the World Channel. Our guest today is a teenager from Russia and we are going to discuss how young people choose their career. We’d like to know our guest’s point of view on this issue. Please answer five questions. So, let’s get started.",
+    qs: ["Have you already decided on your future career?", "What can you tell us about your career plans?", "Is parents’ opinion important in choosing a career for you, and why?", "What problems may appear when discussing a career choice in the family?", "What advice would you give to a teenager who has not chosen their future career yet?"],
+    outro: "Thank you very much for your interview." },
+  t4: { project: "A family weekend", photos: ["img/ege-v17-photo1.jpg", "img/ege-v17-photo2.jpg"],
+    plan: ["explain the choice of the illustrations for the project by briefly describing them and noting the differences;", "mention the advantages (1–2) of the two ways of spending a family weekend;", "mention the disadvantages (1–2) of the two ways of spending a family weekend;", "express your opinion on the subject of the project — say which way of spending a family weekend presented in the pictures you prefer and why."] }
+};
+egeWriting("v17", {
+  e37: { friend: "Catherine", pron: "her", subject: "Costume parties", letter: "…I’ve spent all week trying to fix my costume for a costume party. Have you ever been to a costume party? What costume will you wear if you are invited to this kind of party? Who can help you to make it?\n\n…I did a chemistry test yesterday…",
+    task: "ask 3 questions about the chemistry test", qTopic: "о контрольной по химии", topicWords: ["test", "chemistry", "questions", "mark", "difficult", "teacher", "results"], pages: "с. 194",
+    checks: [["Бывал(а) ли ты на костюмированной вечеринке", /\b(been|went|party|never|once|last)\b/i], ["Какой костюм ты наденешь", /\b(costume|dress|wear|as a|witch|pirate|princess)\b/i], ["Кто поможет тебе его сделать", /\b(help|mum|mother|mom|grandma|sister|friend|myself)\b/i]] },
+  t381: { label: "Following fashion", prompt: "Imagine that you are doing a project on how young Zetlanders follow fashion. You have found some data on the subject — the results of a survey conducted among young Zetlanders (see the table below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "How do you follow fashion?", table: [["Looking through fashion articles online", 36], ["Noticing what others wear", 26], ["Following fashion bloggers", 22], ["Seeking for professional advice", 9], ["Watching fashion shows", 7]],
+    problem: "outline a problem that can arise with following fashion and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on whether it is important for young people to follow fashion.", pages: "с. 194–195" },
+  t382: { label: "Coming of age", prompt: "Imagine that you are doing a project on how young Zetlanders would prefer to celebrate coming of age. You have found some data on the subject — the results of a survey conducted among young Zetlanders (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "How would you prefer to celebrate your coming of age?", table: [["A party with friends", 46], ["A family dinner", 21], ["Attending a special ceremony", 17], ["Going on a trip", 9], ["No special way", 7]],
+    problem: "outline a problem that can arise with coming-of-age celebrations and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on whether coming of age is different from other birthdays.", pages: "с. 195" }
+});
+
+/* ===================== ЕГЭ 2027 · ВАРИАНТ 18 =====================
+   Source: ЕГЭ 2027 (ФИПИ), written part pp. 196–206, oral part p. 263, listening scripts pp. 330–333, oral Task 3 script p. 350,
+   key p. 358. OCR of the scan, checked against the page images (words under the watermark restored from the page context).
+   Listening: the original recording from Natali’s files.
+   SCAN PROBLEM: book p. 264 (oral Tasks 3–4 of variant 18) is missing from the PDF — PDF p. 263 is a blurred copy of p. 265.
+   So the Task 4 project title and photos are unknown; Task 3 questions come from the tapescript on p. 350. */
+EGE_VARIANTS.v18 = {
+  id: "v18", title: "Вариант 18",
+  t1: {
+    statements: ["Homeschooling is not for everyone.", "Extracurricular clubs are a vital part of homeschooling.", "I felt like I lacked communication.", "I have achieved a lot thanks to homeschooling.", "It depends on the facilities available where you live.", "Some stereotypes about homeschooling are not true.", "We had a great community to help with homeschooling."],
+    key: "374615",
+    script: [
+      ["Speaker A", "I was home-schooled in the 7th and 8th grades. The biggest pro was absolutely that the amount of time I was in “school” was around 4–5 hours a day. Both of my parents worked, so they’d leave me assignments. I was pretty much entirely self-taught based on the assignments. The downside was being alone a lot. I was alone all day until my sisters came home from school, and I only had a couple of friends in my age group that I might see on weekends."],
+      ["Speaker B", "I was home-schooled from the 2nd grade through high school. I enjoyed it, and I don’t think I would have done as well in a public-school setting. We had a group of home-schooled families, and one day a week we would all get together and the parents would share the things they knew in different “classes”. We would also all go on “field trips” to science centres, and sometimes farms, to learn about where the things we use every day come from."],
+      ["Speaker C", "I had many friends from home-schooled families, and friends who went to public schools, so I don’t feel like I missed out on any socialisation. I’m now 27 and in graduate school for counselling. I don’t think I would be where I am now if I were not home-schooled. I think having that option is a really good idea if you’re going to do it, as it gives your kid some control over their education. And I believe that is what home-schooling is about at its core."],
+      ["Speaker D", "Some people think that home-schooling is doing nothing. But, in fact, home-schooling is a lot of work. Yet, most of that work is on your parents’ shoulders. Another popular misconception is that only parents who are professional teachers can teach their kids at home. Well, you don’t have to be a certified teacher. By the time your kids reach subjects that you don’t have a Master’s in (which is high-school age), they can teach themselves just fine — using their textbooks."],
+      ["Speaker E", "Both my brother and I were home-schooled for a while, but not at the same time. I think it worked really well for him, but it was awful for me. Why? Because the entire reason I was pulled out of school was because I got a B+ in 7th-grade algebra. I was pretty bitter about leaving school, since I had finally made friends and suddenly, I had no one again. When I went back to public school for high school, I was extremely awkward and — surprise! — no better at maths."],
+      ["Speaker F", "You need to have an active home-schooling community in your area. If you live somewhere with no resources — no other families, support, or groups to take your kids to for socialisation — then you’re going to have a much harder time. I don’t say it’s impossible, but it’s definitely not ideal and it’s going to take even more work to be successful. And some parent-kid combos just aren’t successful because of conflicts or a specific teaching style — which can have negative effects."]
+    ]
+  },
+  t2: {
+    statements: ["Emile has never been at Samantha’s place.", "Samantha’s windows overlook the city centre.", "Samantha would like to stay in the same area.", "Emile lives in the new block of flats next to the University.", "A balcony is a must in Samantha’s new apartment.", "Samantha drives to work.", "Emile is going to search for the apartment on the Internet."],
+    key: "1323221",
+    script: [
+      ["Emile", "Samantha, are you home?"],
+      ["Samantha", "Yeah, I’m here. Come in."],
+      ["Emile", "Hi! It wasn’t easy to find your place."],
+      ["Samantha", "Is it your first visit? I thought you were here a couple of times."],
+      ["Emile", "Yeah, I planned to, but no. I like it, by the way."],
+      ["Samantha", "Funny, I don’t. I’m so fed up with it. Have you noticed how dark it is in here? No sunlight at all. And it’s always noisy — so noisy that I do not dare to open the windows."],
+      ["Emile", "I can help you find a better place. There are plenty of apartments available in the city. Do you have a particular area in mind where you want to live?"],
+      ["Samantha", "I would change the district itself, but I would like some place quieter — and closer to the underground."],
+      ["Emile", "Hmm. Do you know the park next to the Uni? On the other side of it, there are a few new blocks of flats. They are a bit far from the library, but pretty close to the pool."],
+      ["Samantha", "Sounds good."],
+      ["Emile", "Do you own this place? Do you plan to sell it first?"],
+      ["Samantha", "I rent it. And the landlord has just raised the monthly rent. It’s over 15 000 a month, and I’d like to stay within the 10 000 range."],
+      ["Emile", "Well, if you are looking for something similar to this one — a two-bedroom apartment with a living room and a balcony — I doubt it’s possible."],
+      ["Samantha", "A one-bedroom apartment with a living room would be enough. A balcony would be a cherry on the cake."],
+      ["Emile", "That should not be difficult to find."],
+      ["Samantha", "I’m also hoping to find an apartment that has a gym or fitness centre in the building. I don’t want to have to pay for a separate gym membership."],
+      ["Emile", "That’s a great idea. I heard those buildings next to the park have a fitness centre, but we’ll have to check. Have you thought about any other amenities you’d like to have?"],
+      ["Samantha", "Well, I do a lot of cooking, so having a kitchen with modern appliances is important to me. And I love having a washer and dryer in the unit, so I don’t have to go to a laundromat."],
+      ["Emile", "Those are both important things to consider. We can make sure to include those features in the search. And what about parking? Do you need a designated spot?"],
+      ["Samantha", "I don’t have a car."],
+      ["Emile", "So that’s one less thing to worry about! Do you want a doorman or a secure entry system?"],
+      ["Samantha", "Sure. Safety is a top priority for me."],
+      ["Emile", "Noted. We’ll look for buildings with those features as well. Finally, when are you moving out?"],
+      ["Samantha", "I’d say within the next month, if possible."],
+      ["Emile", "I’ll take my laptop, and we’ll see what’s on the market for you."]
+    ]
+  },
+  t39: {
+    questions: [
+      { n: 3, q: "When does the programme run?", o: ["In the morning.", "In the afternoon.", "In the evening."], a: "1" },
+      { n: 4, q: "What do we learn about Pepper York at the beginning of the interview?", o: ["She is a famous psychologist.", "She was born in the capital.", "She works with teenagers."], a: "3" },
+      { n: 5, q: "The presenter mentions Simon to...", o: ["introduce the first question.", "give an example of the general trend.", "show that teenagers can talk to radio staff."], a: "2" },
+      { n: 6, q: "Pepper encourages Simon to...", o: ["make his dream come true.", "be ready for the unknown.", "to consider possible hardships."], a: "2" },
+      { n: 7, q: "Why should teenagers ask themselves many questions?", o: ["They help to set the career path.", "The answers remain the same.", "They give a hint of what life is."], a: "3" },
+      { n: 8, q: "What does Pepper NOT mention as a benefit of studying at college?", o: ["The classes are useful.", "You can get an internship.", "It helps you with your career."], a: "2" },
+      { n: 9, q: "What does Pepper say about good artists?", o: ["They have other interests apart from art.", "They are not afraid of asking questions.", "They studied philosophy and social science."], a: "1" }
+    ],
+    script: [
+      ["Presenter", "Hello, everyone! You’re listening to Youth Community Radio. It was overcast yesterday during the day and showering at night, yet right now there isn’t a cloud in the sky. It’s 5 o’clock, the sun is still rising, and I have a steaming mug of coffee right in front of me. We are waiting to be joined by Pepper York, an upcoming psychologist, who’s been helping kids from 13 to 19 in the capital, but is now with us. Welcome, Pepper!"],
+      ["Pepper York", "Hi, Jack. Thank you for having me today. It’s great to be back in my home town. It’s been a while."],
+      ["Presenter", "It’s great to finally have you on Youth Community Radio. We receive many comments from our listeners — both in our social nets, by post, by phone, you name it — mentioning their struggles to find what they are meant to be. Simon, an 18-year-old boy, posted a comment to our feed saying that he was very passionate about philosophy and social sciences, but he was in love with art for as long as he could remember."],
+      ["Pepper York", "Well, I could assume that — like many others — he is approaching a turn in the road, and is uncertain about everything that comes next. This is a common place to be at eighteen. Am I right in saying that he believes that he doesn’t know whether to pursue an artistic career, or one in cognitive science?"],
+      ["Presenter", "Yes, he feels pressured to pick the right thing to study at the university, and wonders how necessary university is in order to succeed as a visual artist."],
+      ["Pepper York", "First of all, this is what I’d like to say to him, “Simon, you’re too young to give up on the relatively practical and doable dream of pursuing art. But what you should really think about is that the hardest thing about being an artist is that there isn’t really a set way of doing it. So if you are really into it, you should prepare yourself to deal with uncertainties all along the way, and not just at the very beginning.”"],
+      ["Presenter", "How so?"],
+      ["Pepper York", "If it was a one-to-one session, I’d make him think about such questions as: What kind of art should he make? How will he make money? Who will his art be for? How will he structure his days? What will his community be? What steps will he take toward his goals? And many others."],
+      ["Presenter", "Will they help?"],
+      ["Pepper York", "Well, these questions are not easy to answer, and none of the answers will remain reliable for very long. But they will provide insight into the nature of existence. People don’t build their lives in one day. The process is endless, constant, and often with no help from others."],
+      ["Presenter", "Could you please elaborate more on that?"],
+      ["Pepper York", "There are lots of ways to make it as an artist, and really no definite line between making it and not making it. You can make art your career by showing it in galleries and selling your work, or you can be a professor. You can work as a graphic designer or tattoo artist. You can make money by winning grants. You can have a day job to pay the bills, and also create your art. For some of the professions I mentioned, like a professor or an artist showing in galleries, it’s helpful to have a master’s degree."],
+      ["Presenter", "Then maybe that’s a good reason to study art in college? Did that help you to become who you are?"],
+      ["Pepper York", "I have complicated feelings about college. I wasn’t particularly happy there. And besides the few classes which made it all worth it, I don’t know if I learned much. But I’m glad I went. College can give you a bunch of things, besides giving you access to certain jobs and advanced degrees down the road. It gives you time to decide what you want, and access to people who can offer useful advice."],
+      ["Presenter", "Do you think making a life as an artist is easy?"],
+      ["Pepper York", "I wouldn’t say so, but it’s not necessarily harder than other ways of life."],
+      ["Presenter", "What would you suggest that Simon should do?"],
+      ["Pepper York", "Simon, work hard, look for people who can help guide you, and do not be afraid to ask dumb questions. As time passes, you’ll get better at sifting out the right answers from the wrong ones. And, by all means, focus also on philosophy, social science, and other stuff that interests you. Anyone who tells you that artists don’t have other interests or do other things knows only bad artists."]
+    ]
+  },
+  t10: {
+    headings: ["In danger!", "Beautiful variety", "The issue of creation", "Everything’s connected", "Important in nature", "Fighting global warming", "Discovered everywhere", "Looking for solutions"],
+    texts: [
+      "Coral reefs are large underwater structures composed of the skeletons of coral. There are hundreds of different species of coral. Coral reefs have a surprising array of shapes and colours, ranging from round, folded brain corals — named for their resemblance to a human brain — to tall, elegant sea whips and sea fans that look like brightly coloured trees or plants. Fringing reefs are the most commonly seen coral reefs, and they grow near coastlines. Barrier reefs are separated from the coastlines by deeper, wider lagoons.",
+      "Corals are found all over the world’s oceans, from the Aleutian Islands off the coast of Alaska to the warm tropical waters of the Caribbean Sea. The biggest coral reefs are found in the clear, shallow waters of the tropics and subtropics. The largest of these coral reef systems is the Great Barrier Reef in Australia. It is more than 2,400 kilometres long. Scientists have explored only about 20 percent of the ocean’s floor, and they continue to find previously unknown coral reefs that have likely existed for hundreds of years.",
+      "The corals that build reefs are known as hard or reef-building corals. Soft corals, such as sea fans and sea whips, do not produce reefs. The calcium carbonate that is created by hard corals provides a foundation for baby corals to settle upon. And if the local threats to coral reefs are limited, then the corals will build up over time and create a healthy, vibrant coral reef. Other types of animals and plants also contribute to the structure of reefs. For example, algae, seaweed, and sponges add to the architecture of coral reefs.",
+      "The largest coral reef in the world, the Great Barrier Reef, is home to at least 400 individual species of coral and thousands of different species of fish, molluscs, sea snakes, sea turtles, whales, dolphins, birds and more. As with the other coral reefs of the world, this incredible ecological hotspot is under threat. A heat wave in 2016 caused a large percentage of the corals in the Great Barrier Reef to undergo severe bleaching and death. Even in the deeper, less-exposed areas of the reef, nearly 40 percent of the corals had partial bleaching.",
+      "Healthy reefs lead to healthy oceans, and healthy oceans are vital to all life on the planet. The destruction facing not only the Great Barrier Reef, but also every reef around the world, can lead to the extinction of thousands of species of marine life. In turn, coastlines that are currently protected by reefs would more readily be flooded during storms. Some islands and low-lying countries would vanish under the water. Moreover, the highly important and profitable industry that coral reefs provide could collapse.",
+      "The Australian government has put forth a long-term plan to sustain the Great Barrier Reef. The plan outlines efforts to reduce and eventually eliminate dumping materials and chemicals, reduce fishing and poaching, and monitor the water quality. There are also many attempts to rebuild the reef. Scientists are working to breed stronger species of coral that are less sensitive to warmer waters. Another group of ecologists are experimenting with growing corals on steel frames placed over the old parts of the reef.",
+      "Coral reefs cover less than 1 percent of the ocean floor. All the reefs combined would equal an area of about 285,000 square km. Nevertheless, they are among the most productive and diverse ecosystems on Earth. About 25 percent of all known marine species consider coral reefs to be their home. Sometimes referred to as “the rainforests of the sea” for their biodiversity, coral reefs are the primary habitat for 4,000 species of fish, 700 species of coral and thousands of other plants and animals."
+    ],
+    key: "2731485"
+  },
+  t11: {
+    title: "Long River",
+    parts: [
+      "Known in China as Chang Jiang or the “Long River”, the mighty Yangtze River extends more than 6,000 kilometres. It is the longest and the most important river in China, ", "A",
+      " after the Amazon and the Nile.\n\nFlowing from Tibet in the west ", "B",
+      ", the Yangtze has been China’s major transportation route for more than 2,000 years. Nearly 2,700 kilometres of the river are navigable. Its vast area covers about one-fifth of the total area of the country, and encompasses a quarter of the country’s agricultural land.\n\nIts immense length ensures ", "C",
+      " in China. But by far the most popular attraction for tourists is the beautiful Three Gorges: Qutang, Wu, and Xiling. They are in a 200-kilometre stretch between the towns of Fengjie and Yichang. Here the river winds its way through the gorges. Their rugged cliffs and high mountain peaks in the stretch create scenery ", "D",
+      ". In some places it is a mix of raging torrents and dangerous shallows.\n\nThe Three Gorges were once a dangerous stretch of the river, but were nevertheless frequently used for shipping. Since the construction of the Three Gorges Dam, ", "E",
+      ", the river level has been raised, and it has become much quieter and more navigable.\n\nNumerous sightseeing options are available, from luxurious riverboat cruises ", "F",
+      ". Most of the river cruises focus on the region’s many historical attractions and places of scenic beauty."
+    ],
+    options: ["that is as dramatic as the Grand Canyon", "and the third longest river in the world", "that all of the cultural attractions are", "which was structurally complete in 2006", "that the river can be visited at numerous points", "to Shanghai in the east through eight provinces", "to adventure tours along the dramatic river sections"],
+    key: "265147"
+  },
+  t1218: {
+    title: "What I learned from student clubs",
+    text: [
+      "At the end of last semester, I was elected president of the Asian Studies Club at my university. It’s a pretty cool deal — the school gives us a lot of support to host fun events, like foreign movie nights, happy hours, and special receptions. We also sponsor speakers to give special talks on Asia-related topics.",
+      "It goes without saying that becoming a leader or an officer in a student club will help you develop leadership skills that will be invaluable in all areas of life. Being in different roles, I realised that it requires a combination of leadership, advocacy, and community. And I also learned that managing people is not easy... especially students.",
+      "This lesson is probably pretty obvious, but it’s something that I didn’t fully understand until I experienced it myself. Taking on leadership positions is one of the most intimidating things I’ve ever done. However, it’s also one of the most rewarding experiences, because I learned a lot about the nuances of managing teams, people, and expectations.",
+      "First of all, when adopting a leadership role, I struggle in finding the right balance between being “one of the team” and being taken seriously. I always avoid becoming an overly authoritative figure and I try to become super friendly to the people I work with. As a result, people stop taking my deadlines and requests seriously. I used to be scared of imposing real consequences, and I thought I could get things done just by being best friends with my team. I learned the hard way that this does not always work — it is important to set expectations on the very first day of a project and to have tough conversations once in a while.",
+      "Additionally, I cannot emphasise how much I came to value the importance of communication. I realised that I am usually the most frustrated when I’m working on projects where communication is lacking. This is when people don’t respond to group messages (or when they do, it’s very minimal), don’t share their concerns or challenges, don’t participate in discussions, or are generally just disengaged.",
+      "This happens a lot in student clubs (or even class projects). One of the unique challenges of working with students is that they have tons of other things going on, and it’s hard to know if the thing you’re working together on is even in their priority list. If you’ve ever worked in student groups, you are probably familiar with people saying something similar to this: “Oh, I’m so sorry. I had a midterm and another homework assignment going on, so I couldn’t finish it. Can I do it by next week?”",
+      "I realised that I actually don’t mind it when my team moves things around to fit their schedule, but this requires communication. I’ve come to appreciate when people inform me that they have other things that they have to prioritise, and then work out alternatives together with me. This experience made me very conscious of my own communication skills when I have to work with others. I try to keep myself accountable and be on top of communicating my priorities, expectations, and especially challenges to my managers and teammates.",
+      "Overall, leading student clubs taught me the importance of setting expectations and communication (and that students are probably the hardest group of people to manage). Nevertheless, I enjoyed identifying people’s strengths to build an executive board of students who are truly passionate about change and community. Serving as a leader of a student club presents a visible platform for me to help people bring their best selves to the table and think outside of their comfort zone, as college is a time to discover who you are and what intrigues you."
+    ],
+    questions: [
+      { n: 12, q: "The author’s club organised activities connected with...", o: ["specific topics of one region.", "different foreign languages.", "public speaking skills.", "entertaining Asian students."], a: "1" },
+      { n: 13, q: "The author evaluates his leadership experience as...", o: ["one of the most difficult.", "better than he expected.", "both scary and worthwhile.", "both practical and tiring."], a: "3" },
+      { n: 14, q: "It in “until I experienced it myself” (paragraph 3) most probably refers to...", o: ["trying different roles.", "combining studies and clubs.", "understanding fellow students.", "organising and controlling people."], a: "4" },
+      { n: 15, q: "Which did the author try NOT to do when being a leader?", o: ["Setting strict deadlines at the start.", "Showing expectations to be obeyed.", "Taking the work of the club seriously.", "Sharing difficulties with the team."], a: "2" },
+      { n: 16, q: "What upset the author the most in being a leader of a student club?", o: ["Working on difficult projects.", "Lack of involvement in work.", "Lack of time to answer messages.", "When the team is not big enough."], a: "2" },
+      { n: 17, q: "How does the author characterise students he worked with?", o: ["Devoted to the project.", "Unable to set priorities.", "Sometimes irresponsible.", "Having too much work."], a: "4" },
+      { n: 18, q: "What conclusion does the author come to in the last paragraph?", o: ["A leader should support the team and set objectives clearly.", "Being a leader enables you to make your community better.", "A true leader should work hard to bring out the best in others.", "Leaders of students’ organisations should be the best students."], a: "1" }
+    ]
+  },
+  g1924: {
+    title: "History of Stonehenge · Before Stonehenge",
+    items: [
+      { n: 19, pre: "Stonehenge is perhaps the world’s most famous prehistoric monument. It", post: "in several stages.", base: "ERECT", ans: ["waserected"] },
+      { n: 20, pre: "The", post: "monument was an early henge monument, built about 5,000 years ago.", base: "ONE", ans: ["first"] },
+      { n: 21, pre: "Later in the Neolithic period about 2500 BC, there", post: "the unique stone circle. Today, together with Avebury, Stonehenge forms the heart of a World Heritage Site, with a unique concentration of prehistoric monuments.", base: "APPEAR", ans: ["appeared"] },
+      { n: 22, pre: "Before Stonehenge. The", post: "structures known in the immediate area are four or five pits, three of which appear to have held large pine ‘totem-pole like’ posts erected in the Mesolithic period.", base: "EARLY", ans: ["earliest"] },
+      { n: 23, pre: "It", post: "how these posts relate to the monument of Stonehenge. At this time, when much of the rest of southern England was largely covered by woodland, the chalk downland in the area of Stonehenge may have been an unusually open landscape.", base: "NOT KNOW", ans: ["isnotknown", "isn'tknown", "isn’tknown"] },
+      { n: 24, pre: "It is possible that this is why it became the site of an early Neolithic monument complex", post: "back to the period between 8500 and 7000 BC.", base: "DATE", ans: ["dating"] }
+    ]
+  },
+  g2529: {
+    title: "The volcanoes of Kamchatka",
+    items: [
+      { n: 25, pre: "The volcanoes of Kamchatka are a large group of volcanoes situated on the Kamchatka Peninsula, in eastern Russia. The pulsating geysers of Kamchatka were discovered by a local", post: ", Tatyana Ustinova, in 1941.", base: "SCIENCE", ans: ["scientist"] },
+      { n: 26, pre: "The Kamchatka River and the surrounding central side valley are flanked by large volcanic belts containing around 160 volcanoes, 29 of them still", post: ". It makes Russia the country with the most volcanoes globally.", base: "ACT", ans: ["active"] },
+      { n: 27, pre: "This is", post: "one of the most outstanding volcanic regions of the world.", base: "DOUBT", ans: ["undoubtedly", "doubtlessly"] },
+      { n: 28, pre: "Unlike other volcanoes in the world, the volcanoes in Russia have beautiful landscapes that have turned into tourist", post: "centres.", base: "ATTRACT", ans: ["attraction"] },
+      { n: 29, pre: "The landscapes at the base of volcanoes are home to more than a thousand different types of trees making the place", post: "beautiful.", base: "NATURAL", ans: ["naturally"] }
+    ]
+  },
+  l3036: {
+    title: "Joyce",
+    parts: [
+      "Joyce had always hated everything about Hollywood. She wanted nothing to ", 30,
+      " with a life like her parents’ and grandparents’. It was their mother’s dream, and Joyce’s youngest sister Leslie had finally ", 31,
+      " her mother’s dream for her. Julia, their mother, was ", 32,
+      " now that Joyce didn’t have her talent. However, Julia was sure that Leslie was talented. She controlled every aspect of Leslie’s career, just as her father had run her own. Julia had never decided what to have for breakfast, let ", 33,
+      " what parts to take, without him. He made all her decisions for her. Just like Julia was now making Leslie’s. The only difference was that Leslie was a child. Julia wasn’t, when her father was making her decisions for her. He was running her career and her life.\n\nJulia’s main interest was in Leslie’s acting, not her general education. Julia thought Leslie could always catch ", 34,
+      " on school later, though she’d actually never fallen behind. Joyce was conscientious about Leslie’s education, and everyone on the set ", 35,
+      " her. She had an occasional battle with Julia, who didn’t want Leslie to ", 36,
+      " her work with her drama coach, or voice lessons, but Leslie always managed to do all. What she didn’t get to do was hanging out with kids of her own age, or play, except with adults."
+    ],
+    items: {
+      30: { o: ["get", "make", "keep", "do"], a: "4" },
+      31: { o: ["fulfilled", "managed", "completed", "performed"], a: "1" },
+      32: { o: ["confirmed", "considered", "convinced", "concerned"], a: "3" },
+      33: { o: ["only", "alone", "lonely", "simply"], a: "2" },
+      34: { o: ["up", "over", "with", "off"], a: "1" },
+      35: { o: ["resembled", "respected", "regained", "remained"], a: "2" },
+      36: { o: ["miss", "fail", "lack", "lose"], a: "1" }
+    }
+  }
+};
+SPEAK_VARIANTS.v18 = {
+  t1: { text: "Even though you might think that global warming is not a burning issue, there are many dangers. The gradual heating of Earth’s surface, oceans and atmosphere is something that is happening in real life in many places. The consequences and effects of global warming are measurable and visible. Scientists report that ice is melting in both polar ice caps and mountain glaciers. Lakes around the world are warming rapidly changing animals’ migration patterns and plants’ blooming dates.\n\nThe most immediate and obvious consequence of global warming is the increase in temperatures around the world. As global average temperatures warm, weather patterns are changing. These changes will likely include major shifts in wind patterns, annual precipitation, and seasonal temperature variations." },
+  t2: { title: "Enjoy rollerblading with us!", img: "img/ege-v18-ad.jpg", intro: "You are considering trying rollerblading and now you’d like to get more information. In 1.5 minutes you are to ask four direct questions to find out about the following:",
+    points: ["skills needed", "equipment rental", "price per hour", "instructor’s help"],
+    keys: [/skills?|experience|need to|able to|beginners?/i, /rent|hire|equipment|rollerblades|skates/i, /how much|price|cost|per hour/i, /instructor|coach|teacher|help/i] },
+  t3: { topic: "problems of big cities", intro: "Hello everybody! It’s the Teenagers Round the World Channel. Our guest today is a teenager from Russia and we are going to discuss problems of big cities. We’d like to know our guest’s point of view on this issue. Please answer five questions. So, let’s get started.",
+    qs: ["Do you live in a big city or a small town? What is it like?", "What transport do most people use to get around in your city or town?", "Do you think big cities are safe for teenagers or not? Why?", "What are some of the problems in big cities in your country? Give an example.", "What measures would you introduce to solve this problem?"],
+    outro: "Thank you very much for your interview." },
+  t4: { project: "—", photos: [], note: "В скане сборника пропущена страница 264 с заданием 4 этого варианта, поэтому темы проекта и фотографий нет. Возьми задание 4 из любого другого варианта.",
+    plan: ["explain the choice of the illustrations for the project by briefly describing them and noting the differences;", "mention the advantages (1–2) of the two options;", "mention the disadvantages (1–2) of the two options;", "express your opinion on the subject of the project."] }
+};
+egeWriting("v18", {
+  e37: { friend: "Sally", pron: "her", subject: "Graduation", letter: "…I am so glad that school is nearly over and my graduation is in a week. What kind of graduation ceremony do Russian teenagers have at their schools? Do you prefer to celebrate your graduation with your friends or family, and why? What are you planning to do after graduation?\n\n…My sister has published her first novel…",
+    task: "ask 3 questions about the novel", qTopic: "о романе сестры", topicWords: ["novel", "book", "about", "characters", "title", "write", "publish"], pages: "с. 205",
+    checks: [["Какой выпускной бывает в российских школах", /\b(ceremony|last bell|ball|prom|certificates?|school)\b/i], ["С кем отмечать выпуск и почему", /\b(friends|family|because|prefer)\b/i], ["Что ты планируешь после выпуска", /\b(university|college|enter|study|plan|going to)\b/i]] },
+  t381: { label: "Zoo animals", prompt: "Imagine that you are doing a project on the most popular animals in Zetland zoo. You have found some data on the subject — the results of a survey conducted among Zetland parents (see the table below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What animals do your children want to visit in the zoo?", table: [["Monkeys", 43], ["Polar bears", 21], ["Elephants", 19], ["Giraffes", 10], ["Penguins", 7]],
+    problem: "outline a problem that can arise with animals being held in captivity and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on having wild animals as pets.", pages: "с. 205–206" },
+  t382: { label: "Museums", prompt: "Imagine that you are doing a project on the museums that are most popular among Zetland teenagers. You have found some data on the subject — the results of a survey conducted among Zetland teenagers (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What themed museum do you like best of all?", table: [["National History Museum", 28], ["House of Music", 22], ["Computer Museum", 19], ["Science Museum", 16], ["National Art Gallery", 15]],
+    problem: "outline a problem that can arise with visiting a museum and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on whether it is important for teenagers to visit museums.", pages: "с. 206" }
+});
+
+/* ===================== ЕГЭ 2027 · ВАРИАНТ 19 =====================
+   Source: ЕГЭ 2027 (ФИПИ), written part pp. 207–216, oral part pp. 265–266, listening scripts pp. 334–337,
+   oral Task 3 script p. 351, key p. 358. OCR of the scan, checked against the page images.
+   Listening and oral Task 3: original recordings from Natali’s files.
+   Book typo: Q22 «There is a number sources» (should be «a number of sources») — kept as printed. */
+EGE_VARIANTS.v19 = {
+  id: "v19", title: "Вариант 19",
+  t1: {
+    statements: ["It is much better to consume less and use things again.", "It’s better to stop using some materials than recycle them.", "Recycling is a must for every responsible person.", "Recycling is good for the planet but it can be expensive.", "Recycling programmes are unpopular because they cost a lot.", "Recycling activities can do good to the community.", "With a few changes it is easy to do good for the environment."],
+    key: "425176",
+    script: [
+      ["Speaker A", "Recycling — is it worth it to you? Not unless you really want it. Is it worth it for the environment? Yes — less stuff in landfills, more stuff reused, and fewer new materials have to be sourced. Is it worth it energy-wise? Not really. You save very little energy converting recyclable materials back into their raw forms and creating new products. Some may even be quite polluting with the chemicals used, like in paper recycling. So, is it worth recycling? Environmentally, yes. Financially, no."],
+      ["Speaker B", "Cardboard, glass and metal are definitely worth recycling. Plastic — not so much. Most places no longer have anywhere to send plastic to recycle it. There is some domestic recycling capacity for it, but not nearly as much as the supply. I personally just throw away plastic, since my trash service stopped accepting it for recycling. But I also try to buy products with less plastic as much as I can. Hopefully, food manufacturers will soon get more on board with alternatives to plastic."],
+      ["Speaker C", "There is a question whether recycling does good for cities. It depends. Some cities have to ship out the recycling to be processed and changed into a workable material, since they don’t have recycling plants close to them. Some things just don’t make any money because no one wants them — like plastics. Metals are probably the only real things of any worth. So cities have to invest money into recycling, and that is why there are not very many programmes available."],
+      ["Speaker D", "For the most part, modern-day recycling is done so you can feel good about taking an action. Single-use plastic bags, like the ones at the grocery, weren’t recyclable before. In fact, they tend to clog up the sorting machines. Many of the plastic bags even say “don’t recycle, return to store” on them. Glass is a hazard to pick up because it is very likely to break. And once it’s broken, it’s pretty much trash. We need to remember the first two words of the logo: Reduce, Reuse, then Recycle."],
+      ["Speaker E", "Many think recycling is a waste of time and effort, but to me it’s important to sort and recycle whatever is possible. It’s just a matter of what you deem important in your world. Have a separate bin for recyclables next to your trash can, and you won’t need to pick through the dirty trash. It’s much easier if you sort it right away, instead of throwing everything away and sorting it afterward. I want to be better and make our world a cleaner place. It’s totally my decision."],
+      ["Speaker F", "If you care about not having all your trash just going into a big hole in the ground to be someone else’s problem, maybe you can get a community recycling carpool going, or collect bottles and cans with a deposit value for a local cause. My local transfer station has a shed set up by a landscape artist who lives in town. He plants and maintains local roadside flower beds through volunteer efforts, and by using the money he collects from deposits on bottles and cans people leave in the shed."]
+    ]
+  },
+  t2: {
+    statements: ["Jack has astronomy classes twice a week.", "Rose doesn’t know that the Sun is a star.", "Rose read about black holes in a book.", "Jack learnt about constellations from his dad.", "Jack has an elder brother.", "Rose has seen a falling star.", "Rose believes that there is no life on other planets."],
+    key: "1231322",
+    script: [
+      ["Rose", "Hey, Jack! How are you today?"],
+      ["Jack", "Hi, Rosa! A bit overwhelmed, as we had four classes of astronomy today instead of the usual two."],
+      ["Rose", "How so?"],
+      ["Jack", "We usually have two classes on Mondays and Wednesdays, but our teacher went to a conference on Monday and rescheduled all the classes for today."],
+      ["Rose", "Lucky you. We don’t have astronomy yet — only physics and maths. But I love stars! Have you ever looked at the stars and wondered about the universe?"],
+      ["Jack", "Yeah, all the time. It’s amazing how vast and mysterious it is. Did you know that the sun is actually a star?"],
+      ["Rose", "Are you kidding? Of course I know that. It’s the closest star to Earth, and is only 93 million miles away from us."],
+      ["Jack", "You are right! And did you know that the universe is still expanding today?"],
+      ["Rose", "Yeah, and scientists believe that there are billions of galaxies out there."],
+      ["Jack", "That’s crazy, isn’t it? And have you heard of the Big Bang theory?"],
+      ["Rose", "I have, but I don’t remember any facts. Can you remind me?"],
+      ["Jack", "Sure. It’s the idea that the universe started from a massive explosion about 13.8 billion years ago. And today at school we talked about black holes. These are regions in space where the gravitational pull is so strong that nothing can escape from them, not even light."],
+      ["Rose", "Whoa, that’s crazy! Have you studied stars today as well? By the way, what do you call a group of stars that forms a shape in the sky and has a name?"],
+      ["Jack", "Oh, we call them constellations. No, we haven’t studied constellations today, but my dad used to take me to the mountains and we would spend nights looking at them. He was the one who taught me about them. There’s Orion, the Big Dipper, the Little Dipper, and many others. Can you find any of them in the sky?"],
+      ["Rose", "I think I can find the Big Dipper. It looks like a giant spoon."],
+      ["Jack", "Yeah, and it’s part of the constellation Ursa Major, which means “Big Bear” in Latin."],
+      ["Rose", "Cool! Have you ever seen a shooting star?"],
+      ["Jack", "I haven’t, but my brother has. He says it’s amazing. But it’s not really a star. It’s actually a meteoroid that enters Earth’s atmosphere and burns up, creating a bright streak of light."],
+      ["Rose", "That’s so cool! I wish we could see one. Do you think there’s life on other planets?"],
+      ["Jack", "It’s possible. Scientists are always searching for signs of life on other planets or moons in our solar system."],
+      ["Rose", "That would be amazing if we found life out there. I wonder what they would look like."],
+      ["Jack", "Yeah, it’s hard to say. But it’s exciting to think about the possibilities."],
+      ["Rose", "Definitely! I’d love to learn more about astronomy. It’s so fascinating."],
+      ["Jack", "Me too. It’s a never-ending journey of discovery and wonder."]
+    ]
+  },
+  t39: {
+    questions: [
+      { n: 3, q: "Which group of people does the programme target?", o: ["Young adults.", "Children.", "Teenagers."], a: "3" },
+      { n: 4, q: "Parker O’Harra has been friends with Mary for...", o: ["5 years.", "18 years.", "30 years."], a: "3" },
+      { n: 5, q: "As a casting director, Parker is looking for someone who wishes to...", o: ["develop.", "play games.", "be famous."], a: "1" },
+      { n: 6, q: "Which of the following is NOT mentioned by Parker as a must for show participants?", o: ["Being crazy about musicals.", "Being good at performing on stage.", "Being aware of different musicals."], a: "1" },
+      { n: 7, q: "What should participants do before auditions?", o: ["Listen to specific songs.", "Find their vocal range.", "Master a virtual piano."], a: "2" },
+      { n: 8, q: "Why should teenagers audition with mezzo-soprano songs?", o: ["They have adult voices.", "They fit their singing timbre.", "This is what is expected of them."], a: "2" },
+      { n: 9, q: "During the auditions participants should...", o: ["sing their hearts out.", "prove they are talented.", "impress the casting board."], a: "3" }
+    ],
+    script: [
+      ["Presenter", "Hello, hello, my dear listeners! I know that many of you who are now about forty or fifty wished to become actors back when you were kids. And some of you who are in your twenties would still like to play on stage one day. And if you are around ten, well, the world is your oyster and your parents are the ones who can help you right now. So we are here today to do our part, aren’t we, Parker?"],
+      ["Parker O’Harra", "Indeed, we are, Mary."],
+      ["Presenter", "Parker O’Harra is a founder of a theatre company, a producer, a casting director seeking a cast for his new show, and a friend of mine. Parker, I can’t even express how delighted I am to see you here today, the 18th of August — the 5th anniversary of our programme."],
+      ["Parker O’Harra", "Mary, the pleasure is mine. Remember when we were playing in the sandbox some thirty years ago, and I told you that we’d be famous one day and you didn’t believe me? Well, here we are (laughs)."],
+      ["Presenter", "Yes, here we are! But let’s quit reminiscing and focus on the issue at hand. Tell me, Parker, how do you determine who is the right fit for your show?"],
+      ["Parker O’Harra", "First of all, what’s really important to me as a showrunner is authenticity. It’s the key. We want to weed out anyone whose only goal is to become famous. If someone comes on the show to get a check on a social net, or to play games, this is not our person. We take it very seriously, and we want participants who have layers and are willing to grow. That’s the ultimate goal of the show."],
+      ["Presenter", "So, just that? No knowledge, no skills?"],
+      ["Parker O’Harra", "Both are important, but authenticity is the key. Right now, when the theatre community is crazy about musicals, the show features teens and kids making their first steps into the wonderful world of musical theatre. And yes, answering your questions, our participants should know about the most popular musicals and should be able to sing and play and do both things really well."],
+      ["Presenter", "What should participants or their parents do to make their kids ready for auditions?"],
+      ["Parker O’Harra", "Well, first they should check our website for the list of audition songs that are specific to the show. We are looking for participants of various vocal ranges, so, there is no need to learn songs outside your vocal range. If you don’t know your vocal range, it’s time to find out what it is. Knowing and understanding it is an important part of moving forward in your musical journey. And it’s very simple! All you need is a keyboard or a virtual piano, a few spare minutes, and no one around — so that you will have no self-consciousness when you are belting out the notes."],
+      ["Presenter", "Is that also true for younger kids who haven’t reached their vocal maturity yet?"],
+      ["Parker O’Harra", "Oh, trebles! This is what we call the voice type that teens often fall into before their voice transforms into their adult voice. Treble is similar to the adult mezzo-soprano. So, if you are a teenager who has overgrown child-friendly pieces, check out the adult mezzo-soprano repertoire. And please, don’t hold onto an idea like, “I know, I’m definitely a soprano,” which could cause you to sing songs that are absolutely wrong for you. You could have been one when you were five, but your voice changes and so does your repertoire. So I’d suggest you read audition details carefully, as they might specify the type of song we would like to hear. It might be a ballad, or something up-tempo, for example."],
+      ["Presenter", "Do you choose participants only through auditions, or is there a chance to skip the queue?"],
+      ["Parker O’Harra", "The majority of our participants come through official auditions, yet we are ready to go the extra mile and turn over every rock to find every talent that lies below all those places you wouldn’t ordinarily look. We are out looking for new faces constantly. We find some of them by going to places where people act and sing their hearts out and get coins tossed at them. With kids, we attend school plays and drama-class rehearsals, we stop by playgrounds and tune in when hearing a mom and a daughter singing cheerfully while shopping."],
+      ["Presenter", "What would you advise those auditioning for your show?"],
+      ["Parker O’Harra", "If you’re trying to guess what we want, it’s game over. Be a surprise!"]
+    ]
+  },
+  t10: {
+    headings: ["Tasty varieties", "Not always healthy", "New colour and taste", "Chocolate: toxic", "Dark magic", "Better than believed", "Chocolate: nature risks", "Where is chocolate from?"],
+    texts: [
+      "Chocolate is extracted from the fruit of the cacao tree, which grows exclusively in tropical climates. The cacao tree is native to Central and South America, but once European invaders discovered the delicacy in the 18th century, the popularity of chocolate took off, and farmers soon established plantations in other parts of the world. Today, Ghana, Côte d’Ivoire, Nigeria, Indonesia and Brazil account for around 80% of the world’s cacao production. More than half of the chocolate we consume comes from West African countries.",
+      "Historically, fine chocolate falls into three main categories: dark chocolate, milk chocolate and white chocolate. Dark chocolate is made with chocolate liquor, cocoa butter, lecithin, sugar and vanilla. Milk chocolate includes the same ingredients as dark chocolate plus milk fats and milk solids. White chocolate is made with the same ingredients as milk chocolate, except it does not include the chocolate liquor. The type of chocolate depends on what ingredients are present and the percentage of cocoa.",
+      "For many years, physicians warned against eating too much chocolate — suggesting that its high fat content contributed to acne, caries, obesity, high blood pressure, heart disease and diabetes. However, in recent years, the discovery of antioxidant compounds in chocolate has changed this perception and stimulated research on its potential health benefits. Cocoa has healthy forms of dietary fat in it, and contains minerals important for human health, including potassium, phosphorus, copper, iron, zinc and magnesium.",
+      "Cocoa contains high levels of flavonoids, chemicals in plants that are known for their health benefits in humans. Dark chocolate contains especially high amounts of flavonoids, which may be the reason why chocolate consumption has been associated with a decreased risk of heart disease in recent years, according to the 2013 review. Some recent studies have found that regular chocolate consumption is also associated with lower blood pressure, decreased stress levels, increased attention and quick reaction.",
+      "Studies that have found beneficial health outcomes related to chocolate consumption have focused on the consumption of dark chocolate, which has less sugar and fat content than milk chocolate. In addition, the studies looked at moderate amounts of chocolate consumption. Like many foods, chocolate is healthiest when eaten in moderation. The sugars and fats added to chocolate make it high in calories, which may lead to weight gain. Many of the protective effects can be negated by overconsumption.",
+      "Recently, an up-to-date type of chocolate has been invented — ruby chocolate. This variety of chocolate joined the list in 2017. Barry Callebaut, the world’s largest cocoa processing company, developed the pink-hued chocolate by adding a powder that is naturally extracted as cocoa beans are processed to make chocolate. So it is without any flavourings, or additives: it is purely coming out of the cocoa bean. According to its creators, ruby chocolate has a lighter flavour than milk chocolate and is not as sweet.",
+      "It may be surprising but chocolate production can harm the environment. Farmers often clear forests to make room for cacao plantations. According to the World Wildlife Fund, about 70% of the Ivory Coast’s illegal deforestation is related to cacao farming. One danger of deforestation is soil erosion, which can make cultivated land less fertile for cacao plants, creating a vicious cycle. Farmers and scientists are currently working to develop strategies to maintain safe and eco-friendly chocolate production."
+    ],
+    key: "8165237"
+  },
+  t11: {
+    title: "Adventure spirit",
+    parts: [
+      "Few places on the planet rival Australia for its spirit of adventure. Blessed with a mosaic of rugged and beautiful landscapes, this country offers perfect settings for exciting outdoor adventures on land and sea. Along the coast, one can zoom through a horizontal waterfall on a jet boat, snorkel with whale sharks, sail around the tropical islands, ", "A",
+      ".\n\nIn the red-earthed deserts of the country’s dry interior, more rugged adventures can be found. Australia’s famous outback tracks offer four-wheel drive journeys for those into cars, ", "B",
+      " through towering red-walled river gorges. The safest time to paddle through the gorges is during the dry season, from May through November, ", "C",
+      ".\n\nMany Australian adventures take place in beautiful World Heritage-listed wilderness areas ", "D",
+      ". Tourists can raft the Franklin River in Tasmania, and drive along the beach on Queensland’s Fraser Island, ", "E",
+      ". Fishing, mountain biking, birding, hiking, and swimming are all popular things to do there.\n\nFor those ", "F",
+      ", in Sydney one can climb to the summit of the iconic Sydney Harbour Bridge. Guided ascents of the city bridge include a pre-climb preparatory talk, all the safety gear, a photo on the 134-metre-high summit, and entertaining stories about the history of the bridge along the way."
+    ],
+    options: ["or one can hop in a canoe and move", "or dive along the Great Barrier Reef", "who are looking for adventures in the city", "that showcase the best of the country", "which is the largest sand island in the world", "who prefer travelling across wild empty areas", "since rivers rise rapidly during the rainy season"],
+    key: "217453"
+  },
+  t1218: {
+    title: "Why I write my journal",
+    text: [
+      "Before I started writing my bullet journal, I kept asking: “Is it a to-do list, a planner, or a diary?” This was my main question, and I was very annoyed when they told me it was all of these things. But it is all of these things!",
+      "I like bullet journaling because it’s a great way to track my day-to-day activities, as well as my long-term goals. Planners and to-do lists typically only focus on what you’re doing in the future, and diaries typically focus on what you did that day. But all of these things give us a complete picture of who we are. Before I started bullet journaling, the idea of keeping my diary, my personal to-do list, and my work tasks in the same place seemed absurd. But now I understand both how to organise that, and also why it makes sense.",
+      "I’m amazed at how many things I left out of my old diaries — I basically just wrote about boys I had crushes on and nothing else. I didn’t write nearly enough about my friends, cool things I was reading, or simply what my daily routine was like. Bullet journaling helps you record all of the things that are going on in your life, and makes it easy to keep track of the things you want to do in the future.",
+      "It also gives me a space to literally record anything else that doesn’t fall into any of these categories — I have used my journals to take notes in class when I forgot my subject notebook, in meetings, in info sessions. I’ve used it to plan essays and presentations. I even used it as an art journal, where I would draw or just stick random things onto the pages.",
+      "However, many might think that journaling is too time-consuming. “How do you keep up with it?” — this is the question that I get every time I show someone my journals. Yes, it can be time-consuming — if you make it to be. Like the general consensus, I realised quickly that setting up the planner layout at the beginning of every month was too time-consuming, and resorted to use the journal to record all of my random thoughts and ideas before they float away into nothingness. I used it as a combination of a diary, planner, and to-do-lists — where I could write whatever’s in my mind and whatever’s necessary. Pay attention to the key word: necessary. Don’t feel pressured to keep up with a structure and to set aside a time to journal when you don’t actually have the time. The journal is yours and it’s meant to help you!",
+      "The only reason why I’ve kept up with it for so long is that I’ve forgotten how to function as well as I do now without one. I honestly need it to sort out all the projects I’m involved in, and to keep myself sane. It’s a productivity tool as well as therapy. But I don’t always “keep up” with my journal. If I’ve set aside a page to track my spending, and suddenly I don’t feel like that’s useful anymore, I’ll just abandon it. It’s your journal, your rules.",
+      "Personally, I write literally everything. I’ve shamelessly recommended journaling to many people over the past year and many people have told me that they are too scared to write. Some mention that they don’t know how to make their pages look pretty. I always say the same thing: it really doesn’t need to be pretty for it to be useful. I try to make mine nice to look at because I wanted to be creative with it. It was one of my goals when I started a journal. But if you aren’t into aesthetics, feel free to use a pen and a blank journal.",
+      "You also don’t have to write that much. Why force yourself to write pages and pages if you have nothing to say? Just write down things that you find interesting, and things you need to write down — like... a grocery list, or, the homework problems given in class. And if you make a mistake, just turn over to a new page and start over. After all, that’s the beauty of a blank journal."
+    ],
+    questions: [
+      { n: 12, q: "Before the author started bullet journaling she thought it was...", o: ["annoying.", "uninteresting.", "sensible.", "unreasonable."], a: "4" },
+      { n: 13, q: "It is implied that the author mainly used her diaries to write about her...", o: ["school friends.", "unreturned love.", "future plans.", "daily activities."], a: "2" },
+      { n: 14, q: "Which is NOT mentioned in the text as a good use of a journal?", o: ["Presenting in meetings.", "Creating pictures.", "Preparing for classes.", "Writing things down in class."], a: "1" },
+      { n: 15, q: "It in “Yes, it can be time consuming” (paragraph 5) most probably refers to...", o: ["showing your journal.", "recording your thoughts.", "setting up a planner.", "keeping a journal."], a: "4" },
+      { n: 16, q: "Why did the author write her journal for so long?", o: ["It is a habit, though not always useful.", "It is advice from her therapist.", "It increases her efficiency.", "It helps her to limit her spending."], a: "3" },
+      { n: 17, q: "Which advice does the author give to those people who are afraid of starting a journal?", o: ["Write your goals at the start.", "Be creative with your journal.", "Make it functional rather than nice.", "Use a nice-looking journal."], a: "3" },
+      { n: 18, q: "What is the main idea of the article?", o: ["Bullet journals are better than to-do lists.", "You can make your journal in your own way.", "Journaling suits some people better than others.", "Benefit those who keep their journals every day."], a: "2" }
+    ]
+  },
+  g1924: {
+    title: "What happened at the battle of Hastings? · On the eve of the battle",
+    items: [
+      { n: 19, pre: "In the early morning of 14th October 1066, two great armies prepared to fight for the throne of England. On a hilltop 7 miles from Hastings were the forces of Harold, who", post: "king nine months before.", base: "CROWN", ans: ["hadbeencrowned"] },
+      { n: 20, pre: "", post: "them on the far side of the valley below were the troops of Duke William of Normandy, who believed he was the rightful king.", base: "FACE", ans: ["facing"] },
+      { n: 21, pre: "By the end of the day, thousands", post: "dead on the battlefield, and the victorious William was one step nearer to seizing the throne.", base: "LIE", ans: ["lay"] },
+      { n: 22, pre: "On the eve of the battle. There is a number sources giving us detailed information about the battle. We know that by the evening of 13th October, the English and Norman armies were encamped within sight of each other at the place now", post: "simply as Battle.", base: "KNOW", ans: ["known"] },
+      { n: 23, pre: "Duke William of Normandy had had plenty of time to prepare his forces since landing at Pevensey over two weeks", post: ".", base: "EARLY", ans: ["earlier"] },
+      { n: 24, pre: "Harold, by contrast, had just won a hard-fought battle at Stamford Bridge, near York, where he had defeated another claimant to the English throne, Harald Hardrada, King of Norway. When the news of William’s landing reached Harold, he rushed his battle-weary army back south,", post: "only briefly in London to gather extra forces.", base: "STOP", ans: ["stopping"] }
+    ]
+  },
+  g2529: {
+    title: "Mamayev Kurgan",
+    items: [
+      { n: 25, pre: "The great battle on the Volga River became a turning point in the World War II. Due to its convenient", post: "in the very centre of the city, Mamayev Kurgan held the key position in the defence of Stalingrad.", base: "LOCATE", ans: ["location"] },
+      { n: 26, pre: "It is here where a", post: "memorial complex was erected.", base: "COLOSSUS", ans: ["colossal"] },
+      { n: 27, pre: "Mamayev Kurgan Memorial complex “To the heroes of the Battle of Stalingrad” in Volgograd is a symbol of", post: "of the Soviet people and a tribute to the memory of those who perished in battle.", base: "HERO", ans: ["heroism"] },
+      { n: 28, pre: "The key element of the ensemble is a world-famous sculpture “The Motherland Calls!”, one of the most", post: "war monuments.", base: "RECOGNISE", ans: ["recognisable", "recognizable", "recognised", "recognized"] },
+      { n: 29, pre: "At the time of its", post: "in 1967, the statue was the largest free-standing sculpture in the world. Today, it’s the tallest sculpture of a woman in the world.", base: "INSTALL", ans: ["installation"] }
+    ]
+  },
+  l3036: {
+    title: "Gilbert",
+    parts: [
+      "Gilbert Coleman had edited the fourth draft of Mr Taylor’s remarkable memoirs. Now all he wanted to do was take the first available flight to London and hand the manuscript to his publisher. But there was something even more important that ", 30,
+      " him from leaving. An ", 31,
+      " he had no intention of missing, under any circumstances. His mother’s seventieth birthday party.\n\nSusan, his mother, had lived in a cottage on the estate since her second husband’s death three years before. She ", 32,
+      " actively involved with several local charities, and ", 33,
+      " she shortened her jogging distance, she continued to jog every day. Gilbert would never forget the personal sacrifices his mother had made to ", 34,
+      " he won a scholarship to Hartford, and with it the chance to compete with anyone, whatever their background, ", 35,
+      " his oldest friend Dave Dowson.\n\nGilbert and Dave had first met at the church over forty years ago, and seemed an unlikely pair to end up as best friends. One born in the back streets of the docks, the other in a private ward of the London Royal Infirmary. One a scholar, the other a sportsman. And certainly no one would have ", 36,
+      " that Gilbert would fall in love with Dave’s sister, except Alice herself, who claimed she had planned the whole thing after they first met at Dave’s twelfth birthday party."
+    ],
+    items: {
+      30: { o: ["pretended", "prevented", "presented", "preserved"], a: "2" },
+      31: { o: ["event", "accident", "incident", "occurrence"], a: "1" },
+      32: { o: ["remained", "resolved", "removed", "retained"], a: "1" },
+      33: { o: ["despite", "although", "however", "moreover"], a: "2" },
+      34: { o: ["confirm", "support", "provide", "ensure"], a: "4" },
+      35: { o: ["containing", "consisting", "including", "adding"], a: "3" },
+      36: { o: ["predicted", "preferred", "preceded", "prepared"], a: "1" }
+    }
+  }
+};
+SPEAK_VARIANTS.v19 = {
+  t1: { text: "Football (or soccer as the game is called in some parts of the world) has a long history. Football in its current form arose in England in the middle of the 19th century. But alternative versions of the game existed much earlier and are a part of the football history.\n\nThe first known examples of a team game involving a ball, which was made out of a rock, occurred in ancient cultures over 3,000 years ago in pre-Columbian America. In some ritual occasions, the ball would symbolize the sun and the captain of the losing team would be sacrificed to the gods. A unique feature of these ball game versions was a bouncing ball made of rubber — no other early culture had access to rubber.\n\nThe first known ball game which also involved kicking took place in China in the 3rd century BC. It was played with a round ball on an area of a square." },
+  t2: { title: "Come to our yoga classes!", img: "img/ege-v19-ad.jpg", intro: "You are considering taking yoga classes and now you’d like to get more information. In 1.5 minutes you are to ask four direct questions to find out about the following:",
+    points: ["tuition fee", "duration of one class", "special clothes", "evening classes"],
+    keys: [/how much|fee|cost|price|pay/i, /how long|duration|last/i, /clothes|wear|clothing|uniform/i, /evening/i] },
+  t3: { topic: "family traditions", intro: "Hello everybody! It’s the Teenagers Round the World Channel. Our guest today is a teenager from Russia and we are going to discuss family traditions. We’d like to know our guest’s point of view on this issue. Please answer five questions. So, let’s get started.",
+    qs: ["Do you have a big or a small family? How many members are there in your family?", "Who do you feel closest to in your family and why?", "What family traditions do you keep?", "Do you like these traditions? Why, or why not?", "What family traditions would you like to have when you start your own family?"],
+    outro: "Thank you very much for your interview." },
+  t4: { project: "Keeping young", photos: ["img/ege-v19-photo1.jpg", "img/ege-v19-photo2.jpg"],
+    plan: ["explain the choice of the illustrations for the project by briefly describing them and noting the differences;", "mention the advantages (1–2) of the two ways of keeping young for the elderly people;", "mention the disadvantages (1–2) of the two ways of keeping young for the elderly people;", "express your opinion on the subject of the project — say which way of keeping young presented in the pictures your elderly relatives prefer and why."] }
+};
+egeWriting("v19", {
+  e37: { friend: "Mike", pron: "his", subject: "Photography", letter: "…Many of my friends enjoy photography a lot, and I like it too. What is your attitude to photography? Is it a popular hobby in your region? Why, or why not? What new hobby would you like to take up in the future?\n\nYesterday I bought a present for my sister’s birthday…",
+    task: "ask 3 questions about the present", qTopic: "о подарке сестре", topicWords: ["present", "gift", "bought", "sister", "birthday", "like", "cost"], pages: "с. 215",
+    checks: [["Как ты относишься к фотографии", /\b(photograph\w*|photos?|camera|pictures?)\b/i], ["Популярна ли она в твоём регионе и почему", /\b(popular|region|town|city|because)\b/i], ["Какое новое хобби ты хочешь начать", /\b(hobby|take up|would like|future|try)\b/i]] },
+  t381: { label: "Home decor", prompt: "Imagine that you are doing a project on the most popular home decor in Zetland. You have found some data on the subject — the results of a survey conducted among Zetlanders (see the table below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What home decor do you prefer?", table: [["Wall art (posters, prints, paintings)", 39], ["Vases", 25], ["Table lamps", 15], ["Cushions", 11], ["Rugs", 10]],
+    problem: "outline a problem that can arise with decorating your house and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the best decoration for your room.", pages: "с. 216" },
+  t382: { label: "Pets", prompt: "Imagine that you are doing a project on the most popular pet animals in Zetland. You have found some data on the subject — the results of a survey conducted among Zetlanders (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What pet animal have you got?", table: [["Cats", 38], ["Dogs", 32], ["Rabbits", 14], ["Parrots", 12], ["Hamsters", 4]],
+    problem: "outline a problem that can arise with having dogs as pets and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the benefits of having a pet in a family.", pages: "с. 216" }
+});
+
+/* ===================== ЕГЭ 2027 · ВАРИАНТ 20 =====================
+   Source: ЕГЭ 2027 (ФИПИ), written part pp. 217–227, oral part pp. 267–268, listening scripts pp. 338–341,
+   oral Task 3 script p. 351, key p. 358. OCR of the scan, checked against the page images.
+   Listening and oral Task 3: original recordings from Natali’s files.
+   SCAN PROBLEM: book p. 222 (questions 12–17 of the reading text) is missing — PDF p. 222 is a second copy of p. 223.
+   So only question 18 is given. Book quirks kept as printed: Hay «in New South Wales, in Australia» (Q6 key = Australia),
+   «if you leave in the Southern Hemisphere» (= live). */
+EGE_VARIANTS.v20 = {
+  id: "v20", title: "Вариант 20",
+  t1: {
+    statements: ["Exams should be taken more often throughout the school year.", "Exams make assessment of your knowledge fairer.", "Exams are stressful and should be replaced by other things.", "Exams suit me quite well but they are not for everyone.", "Exams stimulate memorisation without much thought.", "Exams make you ready for life but they should be limited.", "Exams can develop your memory in a good way."],
+    key: "451726",
+    script: [
+      ["Speaker A", "My learning style and my academic interests make exams really good for me personally. I enjoy taking them, and have done well for a variety of reasons. But they’re not for everyone, just like major studies in general aren’t for everyone. Plus, exams themselves aren’t bad. It’s the pressure they put on you to study and do well because they’ll contribute to your final grade. And that pressure contributes to the negative connotations associated with exams."],
+      ["Speaker B", "Obviously, exams can be very stressful, especially if most of your grade depends on a single test. And I think that is where exams have the most negative effect. Most classes set up in that manner will have the question “Will this be on the test?” asked a lot. Everything for which the answer is “no” will be immediately forgotten, and the rest will be memorised, because it will be on the test. For sure, that doesn’t encourage learning the material, but simply rote memorisation of facts."],
+      ["Speaker C", "If you have exams that encourage learning the application of what is taught to problems at hand, there will probably be better understanding and retention of the material. This works better with a larger number of smaller tests to check a student’s skills, instead of 2 exams of terror. In this manner, the exams provide a benefit, as the teacher finds out what concepts need to be taught better, and students are really forced to spend time understanding the material before the test."],
+      ["Speaker D", "Those who are against exams say that exams only require a lot of memorising. First of all, memory is extremely useful for a lot of applications, and in fields such as medicine the ability to remember lots of information is key. Secondly, you do have to apply your knowledge in a lot of exams — it’s not just brain dumping. For example, in Math, to truly be able to solve the trickier questions you have to actually understand the mathematics behind them in the first place."],
+      ["Speaker E", "The main reason that I think exams are better than, say, a teacher just saying how good they think you are is bias. In my school, I know many kids who teachers would praise and tell them how gifted they are. But they weren’t really that smart. Exams are the same for everyone who takes them. In some exams, like English, you’re going to have to write something, and exams allow you to show what you know. In subjects like Math, exams help avoid a lot of the bias that teachers have for certain students."],
+      ["Speaker F", "Many think that exams are too stressful for kids at a younger age. I do agree with this to an extent, as I think that preparing for exams is stressful, however, lots of things in life are stressful. Preparing for a job interview? That’s stressful. Exams teach you how to build a schedule to prepare yourself correctly for difficult situations, which is useful. Yet, I don’t believe kids below the age of 12 should be taking many exams, as I think it is a little too stressful for them."]
+    ]
+  },
+  t2: {
+    statements: ["Sean has been studying Greek since he was 4.", "Sean keeps his favourite book near his bed.", "Jinny has chosen a story for the competition.", "Jinny is sceptical about the idea of the competition.", "Jinny is good at drawing posters.", "The play should be uploaded to the Internet.", "Jinny thinks they have enough time to prepare."],
+    key: "2121321",
+    script: [
+      ["Sean", "Hi, Jinny! Have you heard the news?"],
+      ["Jinny", "You’ve won the first prize in a competition?"],
+      ["Sean", "Not yet. But I’m going to and you’ll help me."],
+      ["Jinny", "Wow. You’re kidding."],
+      ["Sean", "I’m not! I’ve found information on the Internet about a competition for young learners, which is open to all pupils who are innovative and creative. We’ve already been studying Greek for 4 years. I think that it’s such a nice opportunity to show everyone how interesting the language and the culture of Greece is."],
+      ["Jinny", "I knew that you love Greek, but I didn’t know that you’re that crazy about it."],
+      ["Sean", "I am. You know that The Greek Legends is my favourite book. It is always near my bed, and I can re-read particular parts whenever I want. Anyway, will you help me?"],
+      ["Jinny", "First of all, tell me what should we do?"],
+      ["Sean", "We need to choose a story. Actually, I’ve already chosen one: it’s a story about Athena, the birth of Athena, to be exact. Then, we should write the script, as it’s a theatrical competition..."],
+      ["Jinny", "Oh, and afterwards, probably, we’ll need people ready to spend all their free time sewing costumes, memorizing lines, and rehearsing without a break for lunch."],
+      ["Sean", "It’s not that bad..."],
+      ["Jinny", "Definitely, not. It’s worse. We don’t know how to write scripts, we don’t have many friends who speak Greek and who are interested in acting."],
+      ["Sean", "Well. As for the script, we can do a search on Internet and find some books or articles of famous Hollywood scriptwriters. They might be very helpful. I’ve already seen one. Then, you can draw a “Wanted” poster and put it at the board near the drama classroom. Believe me, in two days we’ll have an eager and enthusiastic team."],
+      ["Jinny", "Ok. What will be next? Do we need to perform our play live in front of the audience or can we film it?"],
+      ["Sean", "In the spring, we should submit the DVD to the judges. So, we have about 5 months to rehearse, perform, film and crop and edit, and..."],
+      ["Jinny", "Ok, sounds as if you have a plan. And the deadline is reasonable. Let’s try and see what happens. Who knows, maybe we will triumph in this international competition."]
+    ]
+  },
+  t39: {
+    questions: [
+      { n: 3, q: "On which day does the programme run?", o: ["Friday.", "Saturday.", "Sunday."], a: "2" },
+      { n: 4, q: "Which features of a good book town are NOT mentioned by the speaker?", o: ["Scenic locations.", "Economic factors.", "Number of book stores."], a: "2" },
+      { n: 5, q: "Which country does not have book towns?", o: ["Argentina.", "Finland.", "India."], a: "1" },
+      { n: 6, q: "The person who first came up with the idea of a book town was from...", o: ["Australia.", "New Hampshire.", "South Wales."], a: "1" },
+      { n: 7, q: "What makes people travel to book towns?", o: ["Affordable accommodation to stay overnight.", "A chance to get some physical activities.", "Desire for tangible, homemade experience."], a: "3" },
+      { n: 8, q: "What is true about people in book towns?", o: ["They tend to be practical and realistic.", "They are creative and like to brainstorm their ideas.", "They make fortunes by selling secondhand books."], a: "1" },
+      { n: 9, q: "Which distinguishes a book town in South Korea from others?", o: ["It has no citizens.", "It does a literary festival.", "It has a new book museum."], a: "1" }
+    ],
+    script: [
+      ["Presenter", "Broadcasting live around the globe on Radio Sundae is David Silverspoon. Hope, you started your weekend right by waking up to the breakfast show with my colleagues, Sarah and Jessica. Your day just got a whole lot better, and you are now ready to travel around the world with our guest, Jemima Foxcraft. Hi, Jemima! How are you today?"],
+      ["Jemima Foxcraft", "Hello, David. I’m fine, thank you. Much better than yesterday. The weather was terrible, wasn’t it?"],
+      ["Presenter", "It was raining hailstones as big as eggs. But I wouldn’t expect anything different from Friday the 13th."],
+      ["Jemima Foxcraft", "Neither would I (laughing)."],
+      ["Presenter", "So, Jemima, where will you take us today?"],
+      ["Jemima Foxcraft", "I want to take you on a tour around small, picturesque towns full of bookshops and book-related industries. So, we are off for book towns!"],
+      ["Presenter", "And what makes a town a book town?"],
+      ["Jemima Foxcraft", "Well, having one book store or even two in a town doesn’t turn it into a book town. You should have a real concentration of them, where people keen on reading might spend hours, or even days, browsing. While many cities have numerous book shops, book towns have them all in a small area, in order to create a critical mass. They usually begin with a couple of second-hand book stores and later grow to offer new books, too."],
+      ["Presenter", "Is that a recent movement?"],
+      ["Jemima Foxcraft", "It depends on your age. They’ve been out and about for around half a century. Book towns have been springing up all over the globe since the 1970s. There are now dozens of them — from Australia and Finland, to India and South Africa. I haven’t been able to locate any in Russia or Argentina yet."],
+      ["Presenter", "How did it all start? What’s the rationale behind turning a town into a book town?"],
+      ["Jemima Foxcraft", "As it turns out, it all started with an idea. Richard Booth wanted to regenerate Hay, his home town in New South Wales, in Australia. Things used to be economically slim, and the population was decreasing as younger people moved away into cities. So he strived to provide employment, keep people in Hay, and increase the influx of tourists."],
+      ["Presenter", "Why not do it in metropolises?"],
+      ["Jemima Foxcraft", "It is easier to do where rents are low — somewhere away from large cities. Moreover, after we’ve gone through everyone getting excited about e-books and online reading, having something practical and in your hand is something that people are happy to travel for. They’re starting to come back to the idea of things that are handmade, things that are created in a traditional way, things you can hold and smell and touch. I think in locations that are particularly picturesque, those things come together, and people feel they are getting a proper physical experience."],
+      ["Presenter", "It seems to me that there is a balance to keep between the charming nature of a book town, and this almost money-oriented logic."],
+      ["Jemima Foxcraft", "Absolutely. People involved in book selling in small towns must be quite business-minded and hard-headed about it, otherwise it won’t work. But I don’t think anybody’s going to make billions out of selling second-hand books, so it’s got to be people who are doing it for the love of it. And it’s not only about bookselling. Book towns become creative hubs, where there’s plenty to do and see — and the books are just the jumping-off point."],
+      ["Presenter", "So, where should I start if I am to visit one of them?"],
+      ["Jemima Foxcraft", "If you have the means, or you leave in the Southern Hemisphere, go to Hay. Simply because that’s the first book town ever. They have a wide range of bookshops, and there’s a new book museum opening later this year. Another one would be Paju Book City in South Korea. Its major hallmark is that people don’t live there, unlike in other book towns. They come in to work there, and everything there is book-related. My third choice would be Wigtown, in Scotland. It’s a vivid example of a place that was regenerated by book selling. Some twenty years ago it was having a hard time — industries were closing and people were moving out. And they’ve absolutely turned it around — going from nothing, to doing a big literary festival and spin-offs. And the setting is amazing."]
+    ]
+  },
+  t10: {
+    headings: ["Hard times", "Plants like trees", "A great discovery", "Unique small world", "Hidden treasure", "A difficult task", "Unseen life diversity", "Against global warming"],
+    texts: [
+      "Amazon, Borneo, Congo, and Daintree: everyone knows the names of many of the world’s largest or most famous rainforests. And many of us know about the world’s largest span of forests — the boreal forests stretching from Russia to Canada. But how many of us could name an underwater forest? Underwater forests are huge kelp and seaweed forests, stretching much further than it was previously realised. Few of them are even named. But their wonderful canopies are home to large numbers of marine species.",
+      "Underwater forests are mainly formed by seaweeds, which are types of algae. Like other plants on land, seaweeds grow by capturing solar energy and carbon dioxide through photosynthesis. Seaweeds have long been known to be among the fastest growing plants on the planet. The largest species of seaweeds grow tens of metres deep, forming forest canopies that sway in a never-ending dance as waves move through them. To swim through one is to see patterns of light and shadow, and to get a sense of constant movement.",
+      "Seaweed forests face threats from marine heatwaves and climate change. Almost all of the extra heat trapped by greenhouse gases that people have emitted so far has gone into the oceans. This means ocean forests are facing very difficult conditions. Large expanses of ocean forests have recently disappeared off western Australia, eastern Canada and California — resulting in the loss of habitat and carbon storing potential. Unfortunately, the majority of the world’s underwater forests are unrecognised and unexplored.",
+      "Off the coastline of southern Africa lies the Great African Seaforest, while Australia boasts the Great Southern Reef around its southern reaches. There are many more vast, but unnamed, underwater forests all over the world. So far, it has been very challenging to estimate how large an area ocean forests cover. On land, scientists can easily measure forests by satellite. Underwater, it becomes much more complicated. Most satellites cannot take measurements at the depths where underwater forests are found.",
+      "Scientists have found that ocean forests are even more productive than many intensely farmed crops such as wheat, rice and corn. Productivity was highest in temperate regions, which are usually washed by cool, nutrient-rich water. Every year, on average, ocean forests in these regions produce 2 to 11 times more biomass per area than land crops. These findings are encouraging. Such large productivity can be used to help meet the world’s future food security. Seaweed farms can supplement food production on land.",
+      "Seaweeds are very fast-growing plants. Their fast growth rates mean that seaweeds are hungry for carbon dioxide. As they grow, they pull large quantities of carbon from seawater and the atmosphere. Globally, ocean forests may take up as much carbon as the Amazon. This suggests that underwater forests could play a big role in decreasing the negative effects of climate change. It is not known exactly how much seaweed carbon ends up stored and kept safe naturally. This will be an area of intense research in the future.",
+      "Underwater seaweeds offer habitat, food and shelter to a wide variety of marine organisms. They are all unique and different. Large species such as sea-bamboo and giant kelp have gas-filled structures that work like little balloons and help them create vast floating canopies. Other species rely on strong stems to stay upright and support their photosynthetic blades. Some other plants that grow in the sea, like golden kelp on the Great Southern Reef in Australia, cover the seafloor, creating an underwater carpet."
+    ],
+    key: "5216387"
+  },
+  t11: {
+    title: "Natural wonder",
+    parts: [
+      "The Great Barrier Reef on the World Heritage List is Australia’s top tourism treasure. It stretches from the northern tip of Queensland south to the coastal town of Bundaberg. The Great Barrier Reef is the planet’s largest coral reef system ", "A",
+      ". Not only is it made up of hard and soft corals, but also sponges, fish, sea turtles, and other organisms. This complex of reefs, islands, seagrass beds, and corals is so vast ", "B",
+      ".\n\nExperiencing the Great Barrier Reef is a top Australian outdoor adventure, ", "C",
+      ". Among the most popular things to do are scuba diving ", "D",
+      ". One can try sailing around idyllic tropical islands and fishing in special zones. Soaring over this magnificent natural wonder on a scenic flight is also popular.\n\nThanks to its vast size, tourists can access the Great Barrier Reef from various points along the Queensland coast.\n\nThis magnificent spectacle is a must-see sight. Climate change is one of the biggest threats to the Great Barrier Reef. Climate change causes large-scale coral die-off, especially along the reef’s far northern stretches, ", "E",
+      " as soon as they can. The Australian and Queensland Government introduced a long-term sustainability plan to help combat the effects of climate change and pollution, ", "F",
+      " for future generations."
+    ],
+    options: ["and tourists can find plenty of ways to enjoy it", "and comprises one of its richest ecosystems", "so tourists are advised to see this natural wonder", "that they had to be protected by the government", "and snorkelling along the shimmering coral reefs", "but more action is needed to conserve this resource", "that it’s the only living structure visible from space"],
+    key: "271536"
+  },
+  t1218: {
+    title: "Seeing the big picture",
+    note: "В скане сборника пропущена страница 222 с вопросами 12–17 к этому тексту. Поэтому здесь только вопрос 18 — остальные вопросы восстановить нельзя.",
+    text: [
+      "In my very first experiences of interning or doing part-time work, I usually get placed at the very bottom of the food chain. One summer I was an administrative assistant, and now I hold a part-time job as an accounts receivable clerk. Since I mostly come inexperienced, I would have to get trained and mentored by the employees there. Most of the time, I get paired with an employee who introduces me to their daily tasks. After a few times experiencing this, and having the position of an outsider who is given a glimpse of the inner workings of a company, I’ve started to notice something that companies have in common. Most of us are missing the big picture.",
+      "As an employee starting a career in a specific company, in a non-decision-making position, we are often given a set of instructions for our daily tasks. These are the things that need to be done (by us) in order for the organisation to run well. It could be creating clippings of real estate advertisements from the newspaper. It might be processing a payment by following a detailed set of instructions. It could be very tedious stuff that might lead you to start to think: “Why am I doing this?”",
+      "I completely understand that sometimes there just isn’t enough time or resources to explain everything to everyone in the team. But here is why I think understanding the big picture is great for everyone in the organisation.",
+      "First and foremost, not understanding the significance of what you are doing kills motivation. When you are stuck repeatedly doing the same things, for weeks and months... no matter how good of an employee you are, you will get bored. Especially if you don’t understand the contributions that you are making as you work. When you lose motivation, then the quality of your work will automatically decrease. This is bad not just for you, but for the entire company as well — because now you are inefficient.",
+      "On the other hand, if you understand the reasoning behind your tasks why it has to be done, you will feel that you are important to your organisation — that you belong, and that what you do matters. Most of the time, the quality of your work improves if you are motivated.",
+      "For example, every day I have to input the page numbers for the ads in our school paper. It’s tedious work. At first, I didn’t know why I was doing it, and I was getting frustrated with having to do it every day. After a while, however, I realised that this was important because it was the only way for us to make sure that the ads were there, and that we can always use the page number that we’ve inputted to track an advertisement from weeks or months ago, when needed (e.g. when a client requests to see a screenshot of the ad as proof.) After realising this, I started to take this daily task more seriously. Well, I didn’t become super passionate about it either, but I see the importance.",
+      "I feel like entrusting this knowledge to interns, admin-level employees, the newbies in a club, or other similar positions, is beneficial for both the organisation and the individual. By doing this, you are educating them about the bigger things going on at work, and also reminding them that their efforts matter. You are encouraging them to become problem solvers, and to look at things the way you would look at things.",
+      "I’ve seen a lot of people complain every day saying things like, “I don’t understand why they can’t just do it properly! It’s not that hard!” If that’s the case, maybe take a step back. You might know how to do it perfectly because you know the big picture. Maybe, they don’t know how to do the tasks properly because they’re only seeing a small part of the picture, and that’s not enough."
+    ],
+    questions: [
+      { n: 18, q: "What is the main idea of the last paragraph?", o: ["People often like to complain without trying to change things.", "Only those who see the big picture can do their tasks perfectly.", "It is not enough just to know how to do things properly.", "Explaining the importance of tasks to staff improves their work."], a: "4" }
+    ]
+  },
+  g1924: {
+    title: "Roman Britain · History of Hadrian’s Wall",
+    items: [
+      { n: 19, pre: "Do you know that Britain was part of the Roman Empire for over three and a half centuries? From the invasion in AD 43 until rule from Rome ended in the 5th century, the province of Britannia was part of a political union that covered", post: "of Europe.", base: "MUCH", ans: ["most"] },
+      { n: 20, pre: "This period", post: "by several key events, both military and civilian.", base: "MARK", ans: ["wasmarked", "ismarked"] },
+      { n: 21, pre: "By the early 5th century, the Roman Empire could no longer defend", post: "against either internal rebellion or the external threat posed by Germanic tribes expanding in Western Europe. The last of the Roman troops left Britain.", base: "IT", ans: ["itself"] },
+      { n: 22, pre: "History of Hadrian’s Wall. Hadrian’s Wall was the north-west frontier of the Roman empire for nearly 300 years. It was built by the Roman army on the orders of the emperor Hadrian", post: "his visit to Britain in AD 122.", base: "FOLLOW", ans: ["following"] },
+      { n: 23, pre: "By about AD 100 there were many Roman forts in the north of Britain. The forts here", post: "by a road, now known as the Stanegate, between Corbridge and Carlisle.", base: "LINK", ans: ["werelinked"] },
+      { n: 24, pre: "Hadrian came to Britain in AD 122 and, according to a biography", post: "200 years later, ’put many things to right and was the first to build a wall 80 miles long from sea to sea to separate the barbarians from the Romans.”", base: "WRITE", ans: ["written"] }
+    ]
+  },
+  g2529: {
+    title: "Zaryadye Park",
+    items: [
+      { n: 25, pre: "Have you been to Zaryadye Park? It’s an", post: "new park right in the heart of Moscow.", base: "AMAZE", ans: ["amazing"] },
+      { n: 26, pre: "It covers 13 hectares between Red Square and the Moscow River and attracts both Muscovites and tourists.", post: ", its buildings are buried underground.", base: "USUAL", ans: ["unusually"] },
+      { n: 27, pre: "Much of the", post: "natural landscape has been constructed over the roofs of these new buildings. Among them are a media centre and a nature centre, along with a concert hall. Outside, the park has been divided into four zones, each representing a key feature of Russia’s natural landscape and fauna: tundra, steppe, forest, and wetland.", base: "APPARENT", ans: ["apparently"] },
+      { n: 28, pre: "There’s also a walkway over the Moscow River which provides a high", post: "platform.", base: "OBSERVE", ans: ["observation"] },
+      { n: 29, pre: "It allows visitors a wonderful", post: "view of the embankment.", base: "PANORAMA", ans: ["panoramic"] }
+    ]
+  },
+  l3036: {
+    title: "Julie",
+    parts: [
+      "Julie always thumbed a ride back to college, but never told her parents. She knew they wouldn’t ", 30,
+      ". Her father would drive her to the station on the first day of term, when she would hang ", 31,
+      " on the platform until she was certain he was on his way back home. She would then walk the couple of miles to the freeway, stand near the edge of a road and hold out her hand with the thumb raised as a signal for a vehicle to stop and take her to the city. There were two good reasons why Julie ", 32,
+      " to thumb a ride back to Hartford rather than take a bus or train. Twelve round trips a year meant she could save over a hundred dollars, which was important. Her parents could ", 33,
+      " afford any extra expenses. In any case Dad and Ma had already made quite enough sacrifices to ensure she could ", 34,
+      " college, without causing them any further expense.\n\n", 35,
+      ", Julie’s second reason for preferring to thumb rides was that when she graduated she wanted to be a writer, and during the past three years she’d met some fascinating people on the short journey from home to college, who were often willing to share their experiences with a stranger they were unlikely to meet again. Julie had golden rules about who she wouldn’t ", 36,
+      " a ride from. Truck drivers were top of the list. In fact, she avoided most drivers under the age of sixty, especially those behind the wheel of a sports car."
+    ],
+    items: {
+      30: { o: ["assume", "approve", "achieve", "adopt"], a: "2" },
+      31: { o: ["across", "aside", "apart", "around"], a: "4" },
+      32: { o: ["preferred", "enjoyed", "pleased", "admired"], a: "1" },
+      33: { o: ["rarely", "hardly", "really", "nearly"], a: "2" },
+      34: { o: ["enrol", "enlist", "attend", "register"], a: "3" },
+      35: { o: ["Although", "Conversely", "Therefore", "However"], a: "4" },
+      36: { o: ["agree", "allow", "accept", "admit"], a: "3" }
+    }
+  }
+};
+SPEAK_VARIANTS.v20 = {
+  t1: { text: "Arctic foxes live on the land and sea ice within the Arctic Circle. Winter in the Arctic is unlike winter in most parts of the world. From October to February, the sun never rises to shine warmth and light.\n\nLuckily, these small foxes have some useful adaptations for living in the icy Arctic. Their long, fluffy tails act like a blanket, keeping the fox warm when it wraps the tail around its body to sleep. Their feet also have a layer of thick fur, like built-in snow boots. This helps muffle an arctic fox’s footsteps, making it harder for prey to hear them. And their white coats make it difficult for predators such as wolves, polar bears, and golden eagles to spot them among the ice and snow.\n\nWhen it’s not trying to keep warm or avoid predators, an arctic fox is on the hunt for food. They prefer to eat small rodents called lemmings, but when times are tough, they’ll eat whatever they can find: insects and berries." },
+  t2: { title: "Join & help!", img: "img/ege-v20-ad.jpg", intro: "You are considering joining the group of volunteers and now you’d like to get more information. In 1.5 minutes you are to ask four direct questions to find out about the following:",
+    points: ["age limitations", "schedule of work", "tasks to do", "skills needed"],
+    keys: [/how old|age|years old/i, /when|schedule|days?|hours|how often/i, /what .*do|tasks?|duties|responsibilit/i, /skills?|need to|able to|experience/i] },
+  t3: { topic: "healthy lifestyle", intro: "Hello everybody! It’s the Teenagers Round the World Channel. Our guest today is a teenager from Russia and we are going to discuss healthy lifestyle. We’d like to know our guest’s point of view on this issue. Please answer five questions. So, let’s get started.",
+    qs: ["Do you think you have a healthy lifestyle or not? Why do you think so?", "What sports do you and your friends enjoy doing?", "What food is popular among young people in your country? Is it healthy?", "How can schools support healthy lifestyle?", "What would you change in your lifestyle to make it healthier?"],
+    outro: "Thank you very much for your interview." },
+  t4: { project: "Birthday celebrations", photos: ["img/ege-v20-photo1.jpg", "img/ege-v20-photo2.jpg"],
+    plan: ["explain the choice of the illustrations for the project by briefly describing them and noting the differences;", "mention the advantages (1–2) of the two kinds of birthday celebrations;", "mention the disadvantages (1–2) of the two kinds of birthday celebrations;", "express your opinion on the subject of the project — say which way of celebrating your birthday presented in the pictures you preferred as a child and why."] }
+};
+egeWriting("v20", {
+  e37: { friend: "Sam", pron: "her", subject: "Hiking", letter: "…Last weekend my friends and I went on a hiking trip to the mountains. How often do you go on trips with your friends, if at all? Are hiking trips popular with teens in your region, why, or why not? Where would you like to go together with your friends?\n\nMy brother has just won a chess competition…",
+    task: "ask 3 questions about the competition", qTopic: "о шахматном турнире брата", topicWords: ["competition", "chess", "brother", "win", "won", "prize", "tournament"], pages: "с. 226",
+    checks: [["Как часто ты ездишь в поездки с друзьями", /\b(often|sometimes|never|rarely|usually|once|twice|trips?)\b/i], ["Популярны ли походы у подростков в твоём регионе и почему", /\b(popular|hiking|region|because)\b/i], ["Куда ты хотел(а) бы поехать с друзьями", /\b(would like|go to|visit|dream|travel)\b/i]] },
+  t381: { label: "Volunteering", prompt: "Imagine that you are doing a project on the most popular types of volunteer organisations among young Zetlanders. You have found some data on the subject — the results of a survey conducted among young Zetlanders (see the table below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What volunteer organisation do you belong to?", table: [["Ecological organisations", 39], ["Helping in an emergency", 28], ["Animal shelters", 18], ["Supporting senior citizens", 10], ["Helping the homeless", 5]],
+    problem: "outline a problem that can arise with joining a volunteer organisation and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the importance of volunteering for young people.", pages: "с. 226–227" },
+  t382: { label: "School subjects", prompt: "Imagine that you are doing a project on the most important subjects for a future career among Zetland teenagers. You have found some data on the subject — the results of a survey conducted among Zetland teenagers (see the pie chart below). Comment on the survey data and give your opinion on the subject of the project.",
+    question: "What subject do you consider to be the most important for a future career?", table: [["IT", 37], ["Maths", 29], ["Science", 18], ["History", 9], ["Foreign Languages", 7]],
+    problem: "outline a problem that can arise with choosing subjects to study on the advanced level and suggest a way of solving it;", concl: "conclude by giving and explaining your opinion on the most important subject for your future career.", pages: "с. 227" }
 });
 
 /* ===================== MODULE 1 · Units 1.3–1.4 ===================== */
